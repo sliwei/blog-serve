@@ -18,7 +18,7 @@ const checkCode = async (ctx, next) => {
     // let key = ctx.cookie.get('code2');
     let codeSta = false;
     if (code) {
-      let getCode = `${conf.md5Name}${code.toLowerCase()}`;
+      let getCode = `${conf.verificationObs}${code.toLowerCase()}`;
       let md5Code = md5(getCode);
       if (code && md5Code === key) {
         codeSta = true;

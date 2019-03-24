@@ -1,13 +1,16 @@
+const jwt = require('jsonwebtoken');
+const conf = require('../../config');
 const {HttpError} = require('./error');
-const axios = require('axios');
 
 /**
  * 创建token
  * @param dat
  * @returns {*}
  */
-const createToken = async function (dat) {
-  return await axios.post('http://localhost:3000/core/token/create', dat);
+const createToken = function (dat) {
+  return jwt.sign(dat, conf.tokenObs, {
+    expiresIn: conf.cookieOptions.maxAge / 1000 + 's'
+  });
 };
 
 /**
@@ -24,11 +27,13 @@ const checkToken = async (ctx, next) => {
     throw new HttpError(401);
   }
   try {
-    let res = await axios.post('http://localhost:3000/core/token/check', {token: token});
-    if (res.data.code !== 200) {
-      throw new HttpError(401);
-    }
-    ctx.res.USER = res.data.data;
+    jwt.verify(token, conf.tokenObs, function (err, decoded) {
+      if (err) {
+        throw new HttpError(401);
+      } else {
+        ctx.res.USER = decoded;
+      }
+    });
   } catch (err) {
     throw new HttpError(401);
   }

@@ -1,26 +1,17 @@
 /**
- * lw 服务器配置
+ * lw 配置文件
  */
 const db = require('./mysql');
-const oss = require('./oss');
 
 module.exports = {
-    port: 3001,         // 端口
-    socket_port: 4001,  // socket端口
-    socket_safe: false, // socket 连接如果是https协议，则需要证书
-    ssh_options: {      // https证书
-        key: '/etc/letsencrypt/live/api.bstu.cn/privkey.pem',
-        ca: '/etc/letsencrypt/live/api.bstu.cn/chain.pem',
-        cert: '/etc/letsencrypt/live/api.bstu.cn/fullchain.pem'
-    },
-    db: db,
-    tokenName: 'yun.bstu.cn.server', // 验证码生成加自定义字符
-    md5Name: 'yun.bstu.cn.server',
-    verificationSta: true, // 启用验证码BB
-    cookieOptions: {
-        maxAge: 1000 * 3600 * 48,
-        path: '/',
-        httpOnly: false
-    },
-    oss: oss,
+  port: 3001, // 端口
+  db: db, // 数据库
+  tokenObs: 'blog-serve', // token混淆码
+  verificationObs: 'blog-serve', // 验证码混淆码
+  verificationSta: true, // 启用验证码
+  cookieOptions: {
+    maxAge: 1000 * 3600 * 48,
+    path: '/',
+    httpOnly: false
+  },
 };

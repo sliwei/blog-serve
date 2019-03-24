@@ -12,25 +12,25 @@ const pool = mysql.createPool(db.connection);
  * @param callback 返回执行结果
  */
 function execQuery(sql, values, callback) {
-    let errInfo;
-    pool.getConnection(function (err, connection) {
+  let errInfo;
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      errInfo = 'MYSQL获取数据库连接异常！';
+      throw errInfo;
+    } else {
+      console.log(`SQL:`.cyan, `${sql} ${values}`.magenta);
+      connection.query(sql, values, function (err, rows) {
+        release(connection);
         if (err) {
-            errInfo = 'MYSQL获取数据库连接异常！';
-            throw errInfo;
+          errInfo = 'MYSQL语句执行错误:' + err;
+          callback(err);
         } else {
-            console.log(`SQL:`.cyan, `${sql} ${values}`.magenta);
-            connection.query(sql, values, function (err, rows) {
-                release(connection);
-                if (err) {
-                    errInfo = 'MYSQL语句执行错误:' + err;
-                    callback(err);
-                } else {
-                    //注意：第一个参数必须为null
-                    callback(null, rows)
-                }
-            });
+          //注意：第一个参数必须为null
+          callback(null, rows)
         }
-    });
+      });
+    }
+  });
 }
 
 /**
@@ -38,16 +38,16 @@ function execQuery(sql, values, callback) {
  * @param connection
  */
 function release(connection) {
-    try {
-        connection.release(function (error) {
-            if (error) {
-                console.log('MYSQL关闭数据库连接异常！');
-            }
-        });
-    } catch (err) {
-    }
+  try {
+    connection.release(function (error) {
+      if (error) {
+        console.log('MYSQL关闭数据库连接异常！');
+      }
+    });
+  } catch (err) {
+  }
 }
 
 module.exports = {
-    execQuery: execQuery
+  execQuery: execQuery
 };

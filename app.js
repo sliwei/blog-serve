@@ -15,7 +15,6 @@ const fs = require('fs');
 const mysql = require('mysql');
 
 const {CustomError, HttpError} = require('./routes/tool/error');
-const {srever} = require('./routes/tool/socket');
 const conf = require('./config');
 const index = require('./routes');
 
@@ -164,9 +163,6 @@ app.on('error', (err, ctx) => {
   fs.writeFile(logPath, log, {'flag': 'a'});
   /*----错误日志备份----*/
 });
-
-// socket连接
-srever(app);
 
 // start
 const port = conf.port || '3000';
