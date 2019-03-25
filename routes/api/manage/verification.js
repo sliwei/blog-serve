@@ -1,7 +1,7 @@
 const router = require('koa-router')();
 const svgCaptcha = require('svg-captcha');
 const md5 = require('js-md5');
-const conf = require('../../config');
+const conf = require('../../../config');
 
 router.prefix('/blog/manage/verification');
 

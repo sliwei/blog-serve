@@ -1,9 +1,9 @@
 const router = require('koa-router')();
-const {createToken, checkToken} = require('../tool/token');
-const {checkCode} = require('../tool/verification');
-const db = require('../database');
-const {CustomError, HttpError} = require('../tool/error');
-const {randomString} = require('../tool');
+const {createToken, checkToken} = require('../../tool/token');
+const {checkCode} = require('../../tool/verification');
+const db = require('../../database');
+const {CustomError, HttpError} = require('../../tool/error');
+const {randomString} = require('../../tool');
 
 router.prefix('/blog/manage/blog');
 
