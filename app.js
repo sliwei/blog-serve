@@ -119,16 +119,12 @@ app.use(swagger.koa({
 app.use((ctx, next) => {
   return next().catch((err) => {
     console.log(err);
-    let code = 0;
-    let msg = 'unknown error';
-    if (err instanceof CustomError || err instanceof HttpError) {
-      const res = err.getCodeMsg();
-      code = err instanceof HttpError ? res.code : 200;
-      msg = res.msg
-    }
+    let msg = err.msg || err.toString() || 'unknown error';
+    let code = err.code || 500;
     ctx.DATA.code = code;
     ctx.DATA.message = msg;
     ctx.body = ctx.DATA;
+    ctx.status = code;
   })
 });
 
@@ -137,55 +133,34 @@ app.use(index.routes(), index.allowedMethods());
 
 // koa error-handling 服务端、http错误
 app.on('error', (err, ctx) => {
-  if (!err.status) err.status = 500;
-  console.log(`${err.stack}`.red);
-
-  /*----错误日志备份----*/
-  let logPath = resolve(__dirname, './log', 'error.log');
-  let json = {};
-  json.time = new Date().toLocaleString();
-  json.url = ctx.url;
-  json.type = ctx.method;
-  json.request = ctx.request;
-  if (ctx.method === 'GET') {
-    json.parm = ctx.query;
-  } else {
-    json.parm = ctx.request.body;
-  }
-  json.status = err.status;
-  json.message = err.message;
-  json = JSON.stringify(json);
-  let log = '';
-  log += json + ',';
-  log += '\r\n';
-  // log += err.stack;
-  // log += '\r\n';
-  fs.writeFile(logPath, log, {'flag': 'a'});
-  /*----错误日志备份----*/
+  console.error('server error', err, ctx)
 });
 
-// start
-const port = conf.port || '3000';
-const server = http.createServer(app.callback());
+module.exports = app;
 
-server.listen(port);
-server.on('error', (error) => {
-  if (error.syscall !== 'listen') {
-    throw error
-  }
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(port + ' requires elevated privileges');
-      process.exit(1);
-    case 'EADDRINUSE':
-      console.error(port + ' is already in use');
-      process.exit(1);
-    default:
-      throw error
-  }
-});
-
-server.on('listening', () => {
-  console.log('Listening on port: %d', port)
-});
+//
+// // start
+// const port = conf.port || '3000';
+// const server = http.createServer(app.callback());
+//
+// server.listen(port);
+// server.on('error', (error) => {
+//   if (error.syscall !== 'listen') {
+//     throw error
+//   }
+//   // handle specific listen errors with friendly messages
+//   switch (error.code) {
+//     case 'EACCES':
+//       console.error(port + ' requires elevated privileges');
+//       process.exit(1);
+//     case 'EADDRINUSE':
+//       console.error(port + ' is already in use');
+//       process.exit(1);
+//     default:
+//       throw error
+//   }
+// });
+//
+// server.on('listening', () => {
+//   console.log('Listening on port: %d', port)
+// });

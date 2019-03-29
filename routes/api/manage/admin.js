@@ -1,7 +1,82 @@
 const router = require('koa-router')();
 const os = require('os');
-
+const {CustomError, HttpError} = require('../../tool/error');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('bdm296810572_db', 'bdm296810572', 'lw555wam', {
+  host: 'bdm296810572.my3w.com',
+  port: '3306',
+  dialect: 'mysql',
+  insecureAuth: true,
+  dialectOptions: {
+    insecureAuth: true
+  }
+});
+//
+// const User = sequelize.define('sequelize', {
+//   name: Sequelize.STRING,
+// });
+//
+// sequelize.sync()
+//   .then(() => User.create({
+//     name: 'janedoe',
+//   }))
+//   .then(jane => {
+//     console.log(jane.toJSON());
+//   });
+// https://github.com/node-modules/parameter/blob/master/example.js
+var Parameter = require('parameter');
+var p = new Parameter();
+p.addRule('name', function (e, v) {
+  console.log(/^[a-z]$/.test(v));
+  return '只能输入一个汉字!!';
+})
+// var parameter = new Parameter({
+//   translate: function() {
+//     var args = Array.prototype.slice.call(arguments);
+//     // Assume there have I18n.t method for convert language.
+//     // return I18n.__.apply(args);
+//     // console.log(args);
+//
+//     // console.log(args);
+//     return args;
+//   },
+//   validateRoot: true, // restrict the being validate value must be a object
+// });
 router.prefix('/blog/manage/admin');
+
+router.get('/p', async (ctx, next) => {
+  var data = {
+    name: 'bsx',
+    age: 24,
+    gender: 'male'
+  };
+
+  var rule = {
+    name: 'name',
+    age: 'int',
+    gender: ['ma2le1', 'female', 'unknown']
+  };
+  var errors;
+  try{
+    errors = p.validate(rule, data);
+    console.log(errors);
+  } catch (e) {
+    console.log(e);
+  }
+
+  var User = sequelize.define('bstu_tag', {
+    name: Sequelize.STRING,
+  });
+
+  User.findAll().then(function(result){
+    console.log(result);
+  });
+
+  ctx.DATA.code = 0;
+  ctx.DATA.data = errors;
+  ctx.body = ctx.DATA;
+
+});
 
 /**
  * lw 获取服务器信息
