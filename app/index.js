@@ -14,7 +14,6 @@ const swagger = require('swagger-injector');
 const fs = require('fs');
 const mysql = require('mysql');
 
-const {CustomError, HttpError} = require('./routes/tool/error');
 const conf = require('./config');
 const index = require('./routes');
 
@@ -119,12 +118,12 @@ app.use(swagger.koa({
 app.use((ctx, next) => {
   return next().catch((err) => {
     console.log(err);
-    let msg = err.msg || err.toString() || 'unknown error';
-    let code = err.code || 500;
+    let msg = err ? (err.msg || err.toString()) : 'unknown error';
+    let code = err ? (err.code >= 0 ? err.code : 500) : 500;
     ctx.DATA.code = code;
     ctx.DATA.message = msg;
     ctx.body = ctx.DATA;
-    ctx.status = code;
+    ctx.status = [200, 400, 401, 403, 404, 500, 503].indexOf(code) >= 0 ? code : 500;
   })
 });
 
@@ -137,30 +136,3 @@ app.on('error', (err, ctx) => {
 });
 
 module.exports = app;
-
-//
-// // start
-// const port = conf.port || '3000';
-// const server = http.createServer(app.callback());
-//
-// server.listen(port);
-// server.on('error', (error) => {
-//   if (error.syscall !== 'listen') {
-//     throw error
-//   }
-//   // handle specific listen errors with friendly messages
-//   switch (error.code) {
-//     case 'EACCES':
-//       console.error(port + ' requires elevated privileges');
-//       process.exit(1);
-//     case 'EADDRINUSE':
-//       console.error(port + ' is already in use');
-//       process.exit(1);
-//     default:
-//       throw error
-//   }
-// });
-//
-// server.on('listening', () => {
-//   console.log('Listening on port: %d', port)
-// });

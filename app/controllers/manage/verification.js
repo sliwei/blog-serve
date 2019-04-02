@@ -1,14 +1,11 @@
-const router = require('koa-router')();
 const svgCaptcha = require('svg-captcha');
 const md5 = require('js-md5');
 const conf = require('../../../config');
 
-router.prefix('/blog/manage/verification');
-
 /**
  * 生成数字字母验证码
  */
-router.get('/code', async function (ctx, next) {
+const code = async function (ctx, next) {
   let fontSize = ctx.query.size || 40;
   let width = ctx.query.w || 150;
   let height = ctx.query.h || 50;
@@ -29,6 +26,8 @@ router.get('/code', async function (ctx, next) {
     key: key
   };
   ctx.body = ctx.DATA;
-});
+};
 
-module.exports = router;
+module.exports = {
+  code,
+};
