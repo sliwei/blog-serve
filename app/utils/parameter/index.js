@@ -1,8 +1,9 @@
 /**
+ * 数据校验
  * wiki：https://github.com/node-modules/parameter/blob/master/example.js
  * @type {Parameter}
  */
-const {HttpError} = require('../routes/tool/error');
+const {HttpError} = require('../../utils/tool/error');
 const Parameter = require('parameter');
 const parm = new Parameter();
 
@@ -12,12 +13,26 @@ parm.addRule('name', function (e, v) {
   return sta || '只能输入一个字母';
 });
 
-// 路由校验
+// 路由校验列表
 const ruleList = {
-  _blog_manage_admin_p: {
-    name: 'name',
+  // 验证码
+  _blog_manage_verification_code: {
+    size: {type: 'string', required: false},
+    w: {type: 'string', required: false},
+    h: {type: 'string', required: false},
   },
-  _blog_manage_admin_sys: this._blog_manage_admin_p,
+  // 注册
+  _blog_manage_login_register: {
+    password: {type: 'string'},
+    user: {type: 'string'},
+  },
+  // 登录
+  _blog_manage_login_login: {
+    code: {type: 'string'},
+    key: {type: 'string'},
+    ...this._blog_manage_login_register,
+  },
+
 };
 
 /**
@@ -33,13 +48,12 @@ const parameter = async (ctx, next) => {
   } else {
     data = ctx.request.body;
   }
-  console.log(typeof data.age);
   try {
     let name = ctx.req._parsedUrl.pathname;
     name = name.replace(/\//g, '_');
     errors = parm.validate(ruleList[name], data);
   } catch (e) {
-    throw new HttpError(0, e)
+    throw new HttpError(0, e.toString())
   }
   if (errors && errors.length) {
     ctx.DATA.data = errors;

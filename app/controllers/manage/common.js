@@ -1,15 +1,10 @@
-const router = require('koa-router')();
-const axios = require('axios');
-const request = require('request');
 const rp = require('request-promise');
 const fs = require('fs')
-
-router.prefix('/blog/manage/common');
 
 /**
  * POST TEST
  */
-router.post('/upload', async (ctx, next) => {
+const upload = async (ctx, next) => {
   const file = ctx.request.files.file;
   let options = {
     url: 'http://0.0.0.0:3000/core/oss/upload',
@@ -38,6 +33,8 @@ router.post('/upload', async (ctx, next) => {
   delete res.data.res;
   ctx.DATA = res;
   ctx.body = ctx.DATA;
-});
+};
 
-module.exports = router;
+module.exports = {
+  upload,
+};

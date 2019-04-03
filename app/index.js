@@ -123,7 +123,7 @@ app.use((ctx, next) => {
     ctx.DATA.code = code;
     ctx.DATA.message = msg;
     ctx.body = ctx.DATA;
-    ctx.status = [200, 400, 401, 403, 404, 500, 503].indexOf(code) >= 0 ? code : 500;
+    ctx.status = [200, 400, 401, 403, 404, 500, 503].indexOf(code) >= 0 ? code : 200;
   })
 });
 

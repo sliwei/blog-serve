@@ -12,7 +12,7 @@ module.exports = {
 	},
 	mode: 'production',
 	output: {
-		path: path.resolve(__dirname),
+		path: path.resolve(__dirname, 'app'),
 		filename: 'server.js',
 	},
 	resolve: {

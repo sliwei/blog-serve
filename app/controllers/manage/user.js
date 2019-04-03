@@ -1,7 +1,7 @@
 const router = require('koa-router')();
 const {createToken, checkToken} = require('../../tool/token');
 const {checkCode} = require('../../tool/verification');
-const db = require('../../sequelize');
+const db = require('../../utils/sequelize');
 const {CustomError, HttpError} = require('../../tool/error');
 
 router.prefix('/blog/manage/user');

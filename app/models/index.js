@@ -1,5 +1,32 @@
-const Blog = require('./blog');
-const Category = require('./category');
+const {sequelize, Sequelize} = require('../utils/sequelize');
+
+const bstu_blog = require('./bstu_blog');
+const bstu_blog_tag = require('./bstu_blog_tag');
+const bstu_category = require('./bstu_category');
+const bstu_comment = require('./bstu_comment');
+const bstu_configure = require('./bstu_configure');
+const bstu_friend = require('./bstu_friend');
+const bstu_room = require('./bstu_room');
+const bstu_room_message = require('./bstu_room_message');
+const bstu_tag = require('./bstu_tag');
+const bstu_user = require('./bstu_user');
+const v_bstu_blog = require('./v_bstu_blog');
+const v_bstu_blog_tag = require('./v_bstu_blog_tag');
+const v_bstu_comment = require('./v_bstu_comment');
+
+const BstuBlog = bstu_blog(sequelize, Sequelize);
+const BstuBlogTag = bstu_blog_tag(sequelize, Sequelize);
+const BstuCategory = bstu_category(sequelize, Sequelize);
+const BstuComment = bstu_comment(sequelize, Sequelize);
+const BstuConfigure = bstu_configure(sequelize, Sequelize);
+const BstuFriend = bstu_friend(sequelize, Sequelize);
+const BstuRoom = bstu_room(sequelize, Sequelize);
+const BstuRoomMessage = bstu_room_message(sequelize, Sequelize);
+const BstuTag = bstu_tag(sequelize, Sequelize);
+const BstuUser = bstu_user(sequelize, Sequelize);
+const VBstuBlog = v_bstu_blog(sequelize, Sequelize);
+const VBstuBlogTag = v_bstu_blog_tag(sequelize, Sequelize);
+const VBstuComment = v_bstu_comment(sequelize, Sequelize);
 
 /**
  * Associations - 关联
@@ -8,9 +35,14 @@ const Category = require('./category');
  * hasMany 一对多关联将一个来源与多个目标连接起来。 而多个目标接到同一个特定的源
  * belongsToMany 多对多关联用于将源与多个目标相连接。 此外，目标也可以连接到多个源
  */
-Blog.belongsTo(Category, {as: 'category', foreignKey: 'category_id'});
-Category.hasMany(Blog, {as: 'blog', foreignKey: 'category_id'});
+BstuComment.belongsTo(BstuUser, {as: 'c_user', foreignKey: 'u_id'});
+BstuComment.belongsTo(BstuUser, {as: 'f_user', foreignKey: 'f_id'});
+BstuComment.belongsTo(BstuBlog, {as: 'blog', foreignKey: 'b_id'});
 
+// BstuBlog.hasMany(BstuBlogTag, {as: 'tag', foreignKey: 'category_id'});
+// BstuBlogTag.belongsTo(BstuTag, {as: 'tag', foreignKey: 'category_id'});
+// BstuTag.hasMany(BstuBlogTag, {as: 'tag', foreignKey: 'category_id'});
+// BstuCategory.hasMany(BstuBlog, {as: 'blog', foreignKey: 'category_id'});
 
 // init
 // removeAttribute
@@ -100,6 +132,19 @@ Category.hasMany(Blog, {as: 'blog', foreignKey: 'category_id'});
 // belongsToMany
 
 module.exports = {
-  Blog,
-  Category,
+  BstuBlog,
+  BstuBlogTag,
+  BstuCategory,
+  BstuComment,
+  BstuConfigure,
+  BstuFriend,
+  BstuRoom,
+  BstuRoomMessage,
+  BstuTag,
+  BstuUser,
+  VBstuBlog,
+  VBstuBlogTag,
+  VBstuComment,
+  sequelize,
+  Sequelize,
 };

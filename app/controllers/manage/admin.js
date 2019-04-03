@@ -1,10 +1,4 @@
 const os = require('os');
-const models = require('../../models');
-
-const p = async (ctx, next) => {
-  ctx.DATA.data = await models.Blog
-  ctx.body = ctx.DATA;
-};
 
 /**
  * lw 获取服务器信息
@@ -40,6 +34,5 @@ const sys = async (ctx, next) => {
 };
 
 module.exports = {
-  p,
   sys,
 };

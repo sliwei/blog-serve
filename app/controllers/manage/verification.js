@@ -1,6 +1,6 @@
 const svgCaptcha = require('svg-captcha');
 const md5 = require('js-md5');
-const conf = require('../../../config');
+const conf = require('../../config');
 
 /**
  * 生成数字字母验证码

@@ -1,9 +1,6 @@
-const router = require('koa-router')();
-const {createToken} = require('../../tool/token');
-const db = require('../../sequelize');
-const {CustomError, HttpError} = require('../../tool/error');
-
-router.prefix('/blog/manage/login');
+const { createToken } = require("../../utils/tool/token");
+const { HttpError } = require("../../utils/tool/error");
+const { BstuUser, sequelize } = require("../../models");
 
 /**
  * lw 验证信息
@@ -11,20 +8,20 @@ router.prefix('/blog/manage/login');
  */
 const info = async (ctx, next) => {
   let user = ctx.res.USER;
-  let userDat = await db.op(`select * from bstu_user where id = ${user.id}`);
-  if (userDat.length) {
+  let dat = await BstuUser.findOne({ where: { id: user.id } });
+  if (dat) {
     ctx.DATA.data = {
-      name: userDat[0].name,
-      mail: userDat[0].mail,
-      user: userDat[0].user,
-      website: userDat[0].website,
-      good: userDat[0].good,
-      bad: userDat[0].bad,
-      newly_login: userDat[0].newly_login,
-      head_img: userDat[0].head_img,
+      name: dat.name,
+      mail: dat.mail,
+      user: dat.user,
+      website: dat.website,
+      good: dat.good,
+      bad: dat.bad,
+      newly_login: dat.newly_login,
+      head_img: dat.head_img
     };
   } else {
-    throw new HttpError(401);
+    throw new HttpError(500);
   }
   ctx.body = ctx.DATA;
 };
@@ -37,19 +34,25 @@ const info = async (ctx, next) => {
  */
 const login = async (ctx, next) => {
   let dat = ctx.request.body;
-  let data = await db.op(`select id,name,user,head_img from bstu_user where user = "${dat.user}" and password = "${dat.password}" limit 1`);
-  if (data.length) {
-    db.op(`update bstu_user set newly_login = now() where id = ${data[0].id}`);
+  let data = await BstuUser.findOne({
+    where: { user: dat.user, password: dat.password },
+    attributes: ["id", "name", "user", "head_img"]
+  });
+  if (data) {
+    BstuUser.update(
+      { newly_login: sequelize.fn("now") },
+      { where: { id: data.id } }
+    );
     ctx.DATA.data = {
-      token: createToken({id: data[0].id}),
-      user: data[0].user,
-      name: data[0].name,
-      head_img: data[0].head_img,
-      id: data[0].id,
-    }
+      token: createToken({ id: data.id }),
+      user: data.user,
+      name: data.name,
+      head_img: data.head_img,
+      id: data.id
+    };
   } else {
     ctx.DATA.code = 0;
-    ctx.DATA.message = '账户名或密码错误'
+    ctx.DATA.message = "账户名或密码错误";
   }
   ctx.body = ctx.DATA;
 };
@@ -58,15 +61,19 @@ const login = async (ctx, next) => {
  * lw 注册
  * @param name 昵称
  * @param user 账号
- * @param rpassword 密码
+ * @param rpassword 密码 MD5
  * @param code 验证码
  */
 const register = async (ctx, next) => {
   let dat = ctx.request.body;
-  let news = await db.op(`insert into bstu_user(name, user, password) values('${dat.name}', "${dat.user}", "${dat.rpassword}")`);
-  if (news.affectedRows < 1) {
+  let news = await BstuUser.create({
+    name: dat.name,
+    user: dat.user,
+    password: dat.password
+  });
+  if (!news) {
     ctx.DATA.code = 0;
-    ctx.DATA.message = '注册失败';
+    ctx.DATA.message = "注册失败";
   }
   ctx.body = ctx.DATA;
 };
@@ -74,5 +81,5 @@ const register = async (ctx, next) => {
 module.exports = {
   info,
   login,
-  register,
+  register
 };

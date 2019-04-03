@@ -1,20 +1,17 @@
-const router = require('koa-router')();
-const {createToken, checkToken} = require('../../tool/token');
-const {checkCode} = require('../../tool/verification');
-const db = require('../../sequelize');
-const {CustomError, HttpError} = require('../../tool/error');
-
-router.prefix('/blog/manage/tag');
+const {BstuTag} = require("../../models");
 
 /**
  * lw 标签列表
  */
-router.get('/tag_list', async (ctx, next) => {
-  let tag = await db.op('select * from bstu_tag where is_del = 0 order by id desc');
-  console.log(tag);
-  ctx.DATA.data = tag;
+const tag_list = async (ctx, next) => {
+  ctx.DATA.data = await BstuTag.findAll({
+    where: {is_del: 0},
+    order: [
+      ['id', 'DESC']
+    ]
+  });
   ctx.body = ctx.DATA;
-});
+};
 
 /**
  * lw 添加、修改、删除标签
@@ -22,7 +19,7 @@ router.get('/tag_list', async (ctx, next) => {
  * @param name 名称
  * @param sta 删除1:删除 0:正常
  */
-router.post('/operation_tag', checkToken, async (ctx, next) => {
+const operation_tag = async (ctx, next) => {
   let dat = ctx.request.body;
   let tag;
   if (!dat.id) {
@@ -51,6 +48,9 @@ router.post('/operation_tag', checkToken, async (ctx, next) => {
     ctx.DATA.code = 0;
   }
   ctx.body = ctx.DATA;
-});
+};
 
-module.exports = router;
+module.exports = {
+  tag_list,
+  operation_tag,
+};
