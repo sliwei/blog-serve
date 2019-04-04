@@ -45,9 +45,9 @@ router.post('/blog/manage/common/upload', checkToken, upload);
 router.get('/blog/manage/category/category_list', checkToken, category_list);
 router.post('/blog/manage/category/operation_category', checkToken, operation_category);
 // comment
-router.post('/blog/manage/comment/evaluate', checkToken, evaluate);
+router.post('/blog/manage/comment/evaluate', evaluate);
 router.get('/blog/manage/comment/comment_list', checkToken, comment_list);
-router.get('/blog/manage/comment/evaluate_list', checkToken, evaluate_list);
+router.get('/blog/manage/comment/evaluate_list', evaluate_list);
 router.post('/blog/manage/comment/evaluate_examine', checkToken, evaluate_examine);
 router.post('/blog/manage/comment/evaluate_del', checkToken, evaluate_del);
 // configure

@@ -20,7 +20,7 @@ const evaluate = async (ctx, next) => {
         mail: dat.mail,
       }
     });
-    if (hava) {
+    if (!hava) {
       let newDat = {
         name: dat.name,
         website: dat.website,
@@ -105,10 +105,15 @@ const evaluate_list = async (ctx, next) => {
   let code = ctx.query.code;
   try {
     let blog = await BstuBlog.findOne({where: {code: code}});
-    ctx.DATA.data = await BstuComment.findAndCountAll({
+    ctx.DATA.data = await BstuComment.findAll({
       include: [
         {model: BstuUser, as: 'c_user', attributes: ['id', 'name', 'head_img']},
-        {model: BstuUser, as: 'f_user', attributes: ['id', 'name', 'head_img']},
+        {
+          model: BstuComment, as: 'comment', attributes: ['u_id', 'create_time'],
+          include: [
+            {model: BstuUser, as: 'c_user', attributes: ['name', 'head_img']},
+          ]
+        },
       ],
       where: {b_id: blog.id},
       order: [

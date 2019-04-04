@@ -80,6 +80,7 @@ blog-serve
 axios request request-promise|http请求
 jsonwebtoken|token安全验证
 koa2-cors|跨域
+moment|时间处理
 mysql2|数据库
 nunjucks|html模板
 parameter|数据校验
