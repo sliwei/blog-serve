@@ -1,4 +1,5 @@
 /* jshint indent: 2 */
+const moment = require('moment');
 
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('v_bstu_comment', {
@@ -35,7 +36,9 @@ module.exports = function (sequelize, DataTypes) {
     create_time: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: '0000-00-00 00:00:00'
+      get() {
+        return moment(this.getDataValue('create_time')).format('YYYY-MM-DD HH:mm:ss');
+      },
     },
     type: {
       type: DataTypes.INTEGER(1),

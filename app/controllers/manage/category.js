@@ -53,7 +53,7 @@ const operation_category = async (ctx, next) => {
       )
     }
   }
-  if (!res || !(res || res[0])) {
+  if (ctx.state(res)) {
     ctx.DATA.code = 0;
   }
   ctx.body = ctx.DATA;

@@ -1,5 +1,4 @@
 require('babel-polyfill');
-const http = require('http');
 const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views');
@@ -11,8 +10,7 @@ const cors = require('koa2-cors');
 const colors = require('colors');
 const {resolve} = require('path');
 const swagger = require('swagger-injector');
-const fs = require('fs');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const conf = require('./config');
 const index = require('./routes');
@@ -105,6 +103,31 @@ app.use(async (ctx, next) => {
     data: {},
     message: '',
     code: 200,
+  };
+
+  // 状态统一判断
+  ctx.state = res => {
+
+    // 1. (res && ((res && !res.length) || (res.length && res[0]) || res.id))
+    // 2. ((res && res.length) ? !!res[0] : !!res)
+
+    // [0]            false
+    // [1]            true
+    // {}             true
+    // {id: 1}        true
+    // null           false
+    // ''             false
+    // 'a'            true
+    // ""             false
+    // "a"            true
+    // undefined      false
+    // 1              true
+    // 0              false
+    // NaN            false
+
+    // 反转
+    // return !(res && ((res && !res.length) || (res.length && res[0]) || res.id));
+    return !((res && res.length) ? res[0] : res);
   };
   await next();
 });

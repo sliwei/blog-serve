@@ -20,5 +20,6 @@ module.exports = {
       insecureAuth: true,
       timestamps: false,
     },
+    timezone: '+08:00'
   },
 };

@@ -1,8 +1,8 @@
 const rp = require('request-promise');
-const fs = require('fs')
+const fs = require('fs');
 
 /**
- * POST TEST
+ * 单张图片上传
  */
 const upload = async (ctx, next) => {
   const file = ctx.request.files.file;

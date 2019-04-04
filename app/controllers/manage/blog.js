@@ -1,6 +1,6 @@
 const {HttpError} = require('../../utils/tool/error');
 const {randomString} = require('../../utils/tool');
-const {VBstuBlog, Sequelize, BstuBlog} = require("../../models");
+const {VBstuBlog, Sequelize, BstuBlog, VBstuBlogTag, BstuBlogTag} = require("../../models");
 const Op = Sequelize.Op;
 
 /**
@@ -27,14 +27,14 @@ const server_list = async (ctx, next) => {
     u_id: user.id,
     is_del: 0,
     category_id: category_id,
-    [Op.and]: [
+    [Op.or]: [
       {title: {[Op.like]: `%${keyword}%`}},
       {markdown: {[Op.like]: `%${keyword}%`}},
       {content: {[Op.like]: `%${keyword}%`}},
     ]
   };
   !category_id && delete where.category_id;
-  !keyword && delete where[Op.and];
+  !keyword && delete where[Op.or];
   let dat = await VBstuBlog.findAndCountAll({
     where: where,
     attributes: ['id', 'title', 'code', 'img', 'time', 'create_time', 'is_draft', 'is_evaluate', 'category_name', 'user_name'],
@@ -102,9 +102,22 @@ const edit = async (ctx, next) => {
       !(dat.is_draft >= 0) && delete upDat.is_draft;
       !(dat.is_evaluate >= 0) && delete upDat.is_evaluate;
 
-      res = await BstuBlog.update(
-        upDat, {where: {id: dat.id}}
-      );
+      try {
+        await BstuBlog.update(
+          upDat, {where: {id: dat.id}}
+        );
+        await BstuBlogTag.destroy({
+          where: {b_id: dat.id}
+        });
+        let newDat = [];
+        dat.tag_id.map(id => {
+          newDat.push({t_id: id, b_id: dat.id})
+        });
+        await BstuBlogTag.bulkCreate(newDat)
+        res = true
+      } catch (e) {
+        res = false
+      }
       // res [ 1 ]
     } else {
       ctx.DATA.code = 0;
@@ -127,22 +140,31 @@ const edit = async (ctx, next) => {
       }
     };
     await check();
+
+    let tag = [];
+    dat.tag_id.map(id => {
+      tag.push({t_id: id})
+    });
     let newDat = {
       u_id: user.id,
       title: dat.title,
       content: dat.content,
       markdown: dat.markdown,
-      // time: dat.time ? new Date(dat.time) : null, TODO
+      time: new Date(dat.time),
       category_id: 9,
       is_draft: dat.is_draft || 0,
       img: dat.img,
       is_evaluate: dat.is_evaluate || 0,
       code: code,
+      blog_tag: tag
     };
-    res = await BstuBlog.create(newDat);
+    res = await BstuBlog.create(newDat, {include: [{model: BstuBlogTag, as: 'blog_tag'}]});
     // res {xxx-xxx}
   }
-  if (!res || !(res || res[0])) {
+
+  console.log(res);
+
+  if (ctx.state(res)) {
     ctx.DATA.code = 0;
   }
   ctx.body = ctx.json(ctx.DATA);
@@ -165,7 +187,7 @@ const blog_status = async (ctx, next) => {
   let res = await BstuBlog.update(
     upDat, {where: {id: dat.id}}
   );
-  if (!res[0]) {
+  if (ctx.state(res)) {
     ctx.DATA.code = 0;
   }
   ctx.body = ctx.DATA;
@@ -179,6 +201,9 @@ const detail = async (ctx, next) => {
   let id = ctx.query.id || 0;
   let code = ctx.query.code || '';
   ctx.DATA.data = await BstuBlog.findOne({
+    include: [
+      {model: VBstuBlogTag, as: 'tag_list', attributes: ['name', ['t_id', 'id']]},
+    ],
     where: {
       [Op.or]: [
         {code: code},

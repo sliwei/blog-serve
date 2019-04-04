@@ -1,4 +1,5 @@
 /* jshint indent: 2 */
+const moment = require('moment');
 
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('bstu_comment', {
@@ -14,7 +15,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     b_id: {
       type: DataTypes.INTEGER(10),
-      allowNull: false
+      allowNull: true
     },
     f_id: {
       type: DataTypes.INTEGER(10),
@@ -22,19 +23,23 @@ module.exports = function (sequelize, DataTypes) {
     },
     cont: {
       type: DataTypes.STRING(5000),
-      allowNull: false
+      allowNull: true
     },
     is_del: {
       type: DataTypes.INTEGER(1).UNSIGNED.ZEROFILL,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 0
     },
     is_pass: {
       type: DataTypes.INTEGER(1),
       allowNull: false,
-      defaultValue: '0'
+      defaultValue: 0
     },
     create_time: {
       type: DataTypes.DATE,
+      get() {
+        return moment(this.getDataValue('create_time')).format('YYYY-MM-DD HH:mm:ss');
+      },
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     },
