@@ -36,7 +36,8 @@ const VBstuComment = v_bstu_comment(sequelize, Sequelize);
  * belongsToMany 多对多关联用于将源与多个目标相连接。 此外，目标也可以连接到多个源
  */
 BstuComment.belongsTo(BstuUser, {as: 'c_user', foreignKey: 'u_id'}); // 评论 -> 用户(评论人)
-BstuComment.belongsTo(BstuUser, {as: 'f_user', foreignKey: 'f_id'}); // 评论 -> 用户(被回复人)
+// BstuComment.belongsTo(BstuUser, {as: 'f_user', foreignKey: 'f_id'}); // 评论 -> 用户(被回复人)
+BstuComment.belongsTo(BstuComment, {as: 'comment', foreignKey: 'f_id'}); // 评论 -> 用户(被回复人)
 BstuComment.belongsTo(BstuBlog, {as: 'blog', foreignKey: 'b_id'}); // 评论 -> 博客
 BstuBlog.belongsTo(BstuUser, {as: 'user', foreignKey: 'u_id'}); // 博客 -> 用户
 BstuBlog.belongsTo(BstuCategory, {as: 'category', foreignKey: 'category_id'}); // 博客 -> 分类

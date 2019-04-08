@@ -127,8 +127,8 @@ const neighbor = async (ctx, next) => {
   });
 
   ctx.DATA.data = {
-    after: after || {},
-    front: front || {},
+    after: after[0] || {},
+    front: front[0] || {},
   };
   ctx.body = ctx.DATA;
 };

@@ -4,7 +4,7 @@
 const db = require('./mysql');
 
 module.exports = {
-  port: 3001, // 端口
+  port: 3004, // 端口
   db: db, // 数据库
   tokenObs: 'blog-serve', // token混淆码
   verificationObs: 'blog-serve', // 验证码混淆码
