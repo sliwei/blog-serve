@@ -30,7 +30,8 @@ const ruleList = {
   _blog_manage_login_login: {
     code: {type: 'string'},
     key: {type: 'string'},
-    ...this._blog_manage_login_register,
+    password: {type: 'string'},
+    user: {type: 'string'},
   },
 
 };
