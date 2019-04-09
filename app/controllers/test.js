@@ -1,20 +1,8 @@
-const axios = require('axios');
-const {CustomError, HttpError} = require('../utils/tool/error');
-
 /**
  * GET TEST
  */
 const get = async (ctx, next) => {
-  let dat;
-  try {
-    dat = await axios.get('http://127.0.0.1:3000/core/test/get');
-  } catch (e) {
-    throw new HttpError(500);
-  }
-  ctx.DATA.data = {
-    query: ctx.query,
-    dat: dat,
-  };
+  ctx.DATA.data = ctx.query;
   ctx.DATA.message = 'This is the GET test.';
   ctx.body = ctx.DATA;
 };
