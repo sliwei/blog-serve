@@ -1,6 +1,6 @@
-const { createToken } = require("../../utils/tool/token");
-const { HttpError } = require("../../utils/tool/error");
-const { BstuUser, sequelize } = require("../../models");
+const {createToken} = require("../../utils/tool/token");
+const {HttpError} = require("../../utils/tool/error");
+const {BstuUser, sequelize} = require("../../models");
 
 /**
  * lw 验证信息
@@ -8,7 +8,7 @@ const { BstuUser, sequelize } = require("../../models");
  */
 const info = async (ctx, next) => {
   let user = ctx.res.USER;
-  let dat = await BstuUser.findOne({ where: { id: user.id } });
+  let dat = await BstuUser.findOne({where: {id: user.id}});
   if (dat) {
     ctx.DATA.data = {
       name: dat.name,
@@ -35,21 +35,26 @@ const info = async (ctx, next) => {
 const login = async (ctx, next) => {
   let dat = ctx.request.body;
   let data = await BstuUser.findOne({
-    where: { user: dat.user, password: dat.password },
+    where: {user: dat.user, password: dat.password},
     attributes: ["id", "name", "user", "head_img"]
   });
   if (data) {
-    BstuUser.update(
-      { newly_login: sequelize.fn("now") },
-      { where: { id: data.id } }
-    );
-    ctx.DATA.data = {
-      token: createToken({ id: data.id }),
-      user: data.user,
-      name: data.name,
-      head_img: data.head_img,
-      id: data.id
-    };
+    if (data.allow) {
+      BstuUser.update(
+        {newly_login: sequelize.fn("now")},
+        {where: {id: data.id}}
+      );
+      ctx.DATA.data = {
+        token: createToken({id: data.id}),
+        user: data.user,
+        name: data.name,
+        head_img: data.head_img,
+        id: data.id
+      };
+    } else {
+      ctx.DATA.code = 0;
+      ctx.DATA.message = "你的账号无权限登录该系统";
+    }
   } else {
     ctx.DATA.code = 0;
     ctx.DATA.message = "账户名或密码错误";
