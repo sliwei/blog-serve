@@ -56,6 +56,11 @@ module.exports = function (sequelize, DataTypes) {
     head_img: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    allow: {
+      type: DataTypes.INTEGER(1),
+      allowNull: true,
+      defaultValue: '0'
     }
   }, {
     tableName: 'bstu_user',
