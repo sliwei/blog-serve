@@ -150,7 +150,9 @@ const clientDetail = async (ctx, next) => {
       [Op.or]: {
         code: code,
         id: id,
-      }
+      },
+      is_draft: 0,
+      is_del: 0,
     }
   });
   ctx.body = ctx.DATA;

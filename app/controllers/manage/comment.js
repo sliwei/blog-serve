@@ -71,7 +71,12 @@ const comment_list = async (ctx, next) => {
     include: [
       {model: BstuBlog, as: 'blog', attributes: ['title', 'code']},
       {model: BstuUser, as: 'c_user', attributes: ['name']},
-      {model: BstuUser, as: 'f_user', attributes: ['name']},
+      {
+        model: BstuComment, as: 'comment', attributes: ['u_id', 'create_time'],
+        include: [
+          {model: BstuUser, as: 'c_user', attributes: ['name', 'head_img']},
+        ]
+      },
     ],
     where: {
       [Op.or]: [
