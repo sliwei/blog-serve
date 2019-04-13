@@ -36,7 +36,7 @@ const login = async (ctx, next) => {
   let dat = ctx.request.body;
   let data = await BstuUser.findOne({
     where: {user: dat.user, password: dat.password},
-    attributes: ["id", "name", "user", "head_img"]
+    attributes: ["id", "name", "user", "head_img", "allow"]
   });
   if (data) {
     if (data.allow) {
