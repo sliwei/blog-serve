@@ -44,7 +44,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true,
       get() {
-        return moment(this.getDataValue('time')).format('YYYY-MM-DD HH:mm:ss');
+        return moment(this.getDataValue('time')).format('YYYY/MM/DD HH:mm:ss');
       },
     },
     img: {
@@ -64,7 +64,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false,
       get() {
-        return moment(this.getDataValue('create_time')).format('YYYY-MM-DD HH:mm:ss');
+        return moment(this.getDataValue('create_time')).format('YYYY/MM/DD HH:mm:ss');
       },
       defaultValue: '0000-00-00 00:00:00'
     },

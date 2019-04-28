@@ -13,7 +13,7 @@ const Op = Sequelize.Op;
 const evaluate = async (ctx, next) => {
   let dat = ctx.request.body;
   let hava, u_id;
-  if (dat.website && dat.mail) {
+  if (dat.website || dat.mail) {
     hava = await BstuUser.findOne({
       where: {
         website: dat.website,
@@ -120,7 +120,10 @@ const evaluate_list = async (ctx, next) => {
           ]
         },
       ],
-      where: {b_id: blog.id},
+      where: {
+        is_pass: 1,
+        b_id: blog.id
+      },
       order: [
         ['id', 'DESC'],
       ],
