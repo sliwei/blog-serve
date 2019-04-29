@@ -1,5 +1,6 @@
 const {BstuComment, BstuUser, BstuBlog, Sequelize} = require("../../models");
 const Op = Sequelize.Op;
+var wc = require('sensitive-word-filter');
 
 /**
  * lw 评论、留言
@@ -13,13 +14,15 @@ const Op = Sequelize.Op;
 const evaluate = async (ctx, next) => {
   let dat = ctx.request.body;
   let hava, u_id;
-  if (dat.website || dat.mail) {
-    hava = await BstuUser.findOne({
-      where: {
-        website: dat.website,
-        mail: dat.mail,
-      }
-    });
+  if (dat.name || dat.website || dat.mail) {
+    if (dat.website || dat.mail) {
+      hava = await BstuUser.findOne({
+        where: {
+          website: dat.website,
+          mail: dat.mail,
+        }
+      });
+    }
     if (!hava) {
       let newDat = {
         name: dat.name,
@@ -37,7 +40,9 @@ const evaluate = async (ctx, next) => {
     u_id: u_id,
     b_id: dat.b_id,
     f_id: dat.f_id,
-    cont: dat.cont,
+    is_pass: 1,
+    cont: wc.filter(dat.cont),
+    type: wc.filter(dat.type),
   };
   !u_id && delete newDat.u_id;
   !dat.f_id && delete newDat.f_id;
@@ -79,6 +84,7 @@ const comment_list = async (ctx, next) => {
       },
     ],
     where: {
+      is_del: 0,
       [Op.or]: [
         {b_id: {[Op.in]: ids}},
         {u_id: user.id},
@@ -108,26 +114,51 @@ const comment_list = async (ctx, next) => {
  */
 const evaluate_list = async (ctx, next) => {
   let code = ctx.query.code;
+  console.log(code);
   try {
-    let blog = await BstuBlog.findOne({where: {code: code}});
-    ctx.DATA.data = await BstuComment.findAll({
-      include: [
-        {model: BstuUser, as: 'c_user', attributes: ['id', 'name', 'head_img']},
-        {
-          model: BstuComment, as: 'comment', attributes: ['u_id', 'create_time'],
-          include: [
-            {model: BstuUser, as: 'c_user', attributes: ['name', 'head_img']},
-          ]
+    if (code) {
+      let blog = await BstuBlog.findOne({where: {code: code}});
+      ctx.DATA.data = await BstuComment.findAll({
+        include: [
+          {model: BstuUser, as: 'c_user', attributes: ['id', 'name', 'head_img']},
+          {
+            model: BstuComment, as: 'comment', attributes: ['u_id', 'create_time'],
+            include: [
+              {model: BstuUser, as: 'c_user', attributes: ['name', 'head_img']},
+            ]
+          },
+        ],
+        where: {
+          is_del: 0,
+          is_pass: 1,
+          b_id: blog.id
         },
-      ],
-      where: {
-        is_pass: 1,
-        b_id: blog.id
-      },
-      order: [
-        ['id', 'DESC'],
-      ],
-    });
+        order: [
+          ['id', 'DESC'],
+        ],
+      });
+    } else {
+      ctx.DATA.data = await BstuComment.findAll({
+        include: [
+          {model: BstuUser, as: 'c_user', attributes: ['id', 'name', 'head_img']},
+          {
+            model: BstuComment, as: 'comment', attributes: ['u_id', 'create_time'],
+            include: [
+              {model: BstuUser, as: 'c_user', attributes: ['name', 'head_img']},
+            ]
+          },
+        ],
+        where: {
+          is_del: 0,
+          is_pass: 1,
+          type: 1
+        },
+        order: [
+          ['id', 'DESC'],
+        ],
+      });
+    }
+
   } catch (e) {
     ctx.DATA.code = 0;
   }

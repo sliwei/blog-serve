@@ -1,4 +1,4 @@
-const {VBstuBlog, Sequelize, BstuBlog, BstuUser, BstuCategory, VBstuBlogTag} = require("../../models");
+const {VBstuBlog, Sequelize, BstuBlog, BstuUser, BstuCategory, VBstuBlogTag, BstuFriend} = require("../../models");
 const Op = Sequelize.Op;
 
 /**
@@ -140,20 +140,25 @@ const neighbor = async (ctx, next) => {
 const clientDetail = async (ctx, next) => {
   let id = ctx.query.id || 0;
   let code = ctx.query.code || '';
+  let type = ctx.query.type || '';
+  let where = {
+    [Op.or]: {
+      code: code,
+      id: id,
+    },
+    is_draft: 0,
+    is_del: 0,
+  };
+  if (type) {
+    delete where.is_draft;
+  }
   ctx.DATA.data = await BstuBlog.findOne({
     include: [
       {model: BstuUser, as: 'user', attributes: ['name', 'head_img', 'website', 'good', 'bad', 'newly_login']},
       {model: BstuCategory, as: 'category', attributes: ['name']},
       {model: VBstuBlogTag, as: 'tag_list', attributes: ['name', ['t_id', 'id']]},
     ],
-    where: {
-      [Op.or]: {
-        code: code,
-        id: id,
-      },
-      is_draft: 0,
-      is_del: 0,
-    }
+    where: where
   });
   ctx.body = ctx.DATA;
 };
@@ -175,10 +180,48 @@ const does = async (ctx, next) => {
   ctx.body = ctx.DATA;
 };
 
+/**
+ * lw 最新5篇文章
+ */
+const recent = async (ctx, next) => {
+  let pageIndex = 1;
+  let pageSize = 5;
+  let offset = (pageIndex * pageSize) - pageSize;
+
+  let list = await VBstuBlog.findAll({
+    where: {is_draft: 0, is_del: 0},
+    attributes: ['title', 'img', 'create_time', 'code'],
+    order: [
+      ['id', 'DESC']
+    ],
+    offset: offset,
+    limit: pageSize
+  });
+
+  ctx.DATA.data = list;
+  ctx.body = ctx.DATA;
+};
+
+/**
+ * lw 友链列表
+ */
+const friend_list = async (ctx, next) => {
+  ctx.DATA.data = await BstuFriend.findAll({
+    where: {is_del: 0},
+    attributes: ['title', 'website'],
+    order: [
+      ['id', 'DESC']
+    ]
+  });
+  ctx.body = ctx.DATA;
+};
+
 module.exports = {
   list,
   search,
   neighbor,
   clientDetail,
   does,
+  recent,
+  blogFriendList: friend_list,
 };
