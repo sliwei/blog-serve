@@ -1,4 +1,4 @@
-const {VBstuBlog, Sequelize, BstuBlog, BstuUser, BstuCategory, VBstuBlogTag, BstuFriend} = require("../../models");
+const {VBstuBlog, Sequelize, BstuBlog, BstuUser, BstuCategory, BstuTag, VBstuBlogTag, BstuFriend} = require("../../models");
 const Op = Sequelize.Op;
 
 /**
@@ -15,6 +15,7 @@ const list = async (ctx, next) => {
 
   let res = await VBstuBlog.findAndCountAll({
     where: {is_draft: 0, is_del: 0},
+    attributes: ['title', 'img', 'code', 'create_time', 'id'],
     order: [
       ['id', 'DESC']
     ],
@@ -216,6 +217,28 @@ const friend_list = async (ctx, next) => {
   ctx.body = ctx.DATA;
 };
 
+/**
+ * lw 获取基础信息
+ */
+const num = async (ctx, next) => {
+  ctx.DATA.data = await BstuFriend.findAll({
+    where: {is_del: 0},
+    attributes: ['title', 'website'],
+    order: [
+      ['id', 'DESC']
+    ]
+  });
+  const blog = await BstuBlog.count({where: {is_del: 0, is_draft: 0}});
+  const category = await BstuCategory.count({where: {is_del: 0}});
+  const tags = await BstuTag.count({where: {is_del: 0}});
+  ctx.DATA.data = {
+    blog: blog,
+    category: category,
+    tags: tags,
+  };
+  ctx.body = ctx.DATA;
+};
+
 module.exports = {
   list,
   search,
@@ -224,4 +247,5 @@ module.exports = {
   does,
   recent,
   blogFriendList: friend_list,
+  num,
 };
