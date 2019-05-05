@@ -221,21 +221,40 @@ const friend_list = async (ctx, next) => {
  * lw 获取基础信息
  */
 const num = async (ctx, next) => {
-  ctx.DATA.data = await BstuFriend.findAll({
-    where: {is_del: 0},
-    attributes: ['title', 'website'],
-    order: [
-      ['id', 'DESC']
-    ]
-  });
-  const blog = await BstuBlog.count({where: {is_del: 0, is_draft: 0}});
-  const category = await BstuCategory.count({where: {is_del: 0}});
-  const tags = await BstuTag.count({where: {is_del: 0}});
+  // ctx.DATA.data = await BstuFriend.findAll({
+  //   where: {is_del: 0},
+  //   attributes: ['title', 'website'],
+  //   order: [
+  //     ['id', 'DESC']
+  //   ]
+  // });
+  // const blog = await BstuBlog.count({where: {is_del: 0, is_draft: 0}});
+  // const category = await BstuCategory.count({where: {is_del: 0}});
+  // const tags = await BstuTag.count({where: {is_del: 0}});
+  let blog = 0;
+  let category = 0;
+  let tags = 0;
+  blog = await BstuBlog.count({where: {is_del: 0, is_draft: 0}});
+  category = await BstuCategory.count({where: {is_del: 0}});
+  tags = await BstuTag.count({where: {is_del: 0}});
   ctx.DATA.data = {
     blog: blog,
     category: category,
     tags: tags,
   };
+  ctx.body = ctx.DATA;
+};
+
+/**
+ * lw 标签列表
+ */
+const tag_list = async (ctx, next) => {
+  ctx.DATA.data = await BstuTag.findAll({
+    where: {is_del: 0},
+    order: [
+      ['id', 'DESC']
+    ]
+  });
   ctx.body = ctx.DATA;
 };
 
@@ -248,4 +267,5 @@ module.exports = {
   recent,
   blogFriendList: friend_list,
   num,
+  tags: tag_list,
 };
