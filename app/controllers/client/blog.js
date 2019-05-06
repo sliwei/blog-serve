@@ -1,4 +1,4 @@
-const {VBstuBlog, Sequelize, BstuBlog, BstuUser, BstuCategory, BstuTag, VBstuBlogTag, BstuFriend} = require("../../models");
+const {VBstuBlog, Sequelize, sequelize, BstuBlog, BstuUser, BstuCategory, BstuTag, VBstuBlogTag, BstuFriend} = require("../../models");
 const Op = Sequelize.Op;
 
 /**
@@ -249,12 +249,27 @@ const num = async (ctx, next) => {
  * lw 标签列表
  */
 const tag_list = async (ctx, next) => {
-  ctx.DATA.data = await BstuTag.findAll({
+  let haveTags = await VBstuBlogTag.findAll({
+    attributes: [[sequelize.fn('COUNT', sequelize.col('t_id')), 'num'], ['t_id', 'id']],
+    group: 't_id',
+    raw: true
+  });
+  let list = await BstuTag.findAll({
     where: {is_del: 0},
     order: [
       ['id', 'DESC']
     ]
   });
+  list = JSON.parse(JSON.stringify(list));
+  list.map(item => {
+    item.num = 0;
+    haveTags.map(haveItem => {
+      if (item.id === haveItem.id) {
+        item.num = haveItem.num;
+      }
+    });
+  });
+  ctx.DATA.data = list;
   ctx.body = ctx.DATA;
 };
 
