@@ -273,6 +273,22 @@ const tag_list = async (ctx, next) => {
   ctx.body = ctx.DATA;
 };
 
+/**
+ * lw 归档，查询所有博客的名称/时间/URL/分类
+ */
+const archives = async (ctx, next) => {
+  let res = await VBstuBlog.findAndCountAll({
+    where: {is_draft: 0, is_del: 0},
+    attributes: ['title', 'code', 'create_time', 'id'],
+    order: [
+      ['create_time', 'DESC']
+    ],
+  });
+
+  ctx.DATA.data = res.rows;
+  ctx.body = ctx.DATA;
+};
+
 module.exports = {
   list,
   search,
@@ -283,4 +299,5 @@ module.exports = {
   blogFriendList: friend_list,
   num,
   tags: tag_list,
+  archives,
 };
