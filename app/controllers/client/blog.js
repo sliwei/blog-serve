@@ -288,6 +288,7 @@ const archives = async (ctx, next) => {
   ctx.DATA.data = res.rows;
   ctx.body = ctx.DATA;
 };
+console.log('AA')
 
 module.exports = {
   list,
