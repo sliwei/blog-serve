@@ -1,4 +1,4 @@
-const {BstuTag} = require("../../models");
+const {BstuTag, VBstuBlogTag} = require("../../models");
 
 /**
  * lw 标签列表
@@ -21,30 +21,39 @@ const tag_list = async (ctx, next) => {
  */
 const operation_tag = async (ctx, next) => {
   let dat = ctx.request.body;
-  let tag;
+  let res;
   if (!dat.id) {
     // 新增
-    tag = await db.op(`insert into bstu_tag(name) values('${dat.name}')`);
+    let newDat = {
+      name: dat.name
+    };
+    res = await BstuTag.create(newDat);
+
   } else {
     let have = false;
     if (dat.sta && dat.sta === 1) {
-      let isDel = await db.op(`select count(id) as num from bstu_blog_tag where t_id = ${dat.id}`);
-      if (isDel[0].num > 0) {
-        have = true;
-      }
+      let count = await VBstuBlogTag.count({
+        where: {t_id: dat.id}
+      });
+      count && (have = true);
     }
     if (have) {
       ctx.DATA.code = 0;
       ctx.DATA.message = '不能删除已被使用的标签';
     } else {
       // 修改、删除
-      tag = await db.op(`update bstu_tag set 
-      name = '${dat.name || 'name'}',
-      is_del = ${dat.sta || 'is_del'}
-      where id = ${dat.id}`);
+      let upDat = {
+        name: dat.name,
+        is_del: dat.sta,
+      };
+      !dat.name && delete dat.name;
+      !(dat.sta >= 0) && delete dat.is_del;
+      res = await BstuTag.update(
+        upDat, {where: {id: dat.id}}
+      )
     }
   }
-  if (!tag || tag.affectedRows < 1) {
+  if (ctx.state(res)) {
     ctx.DATA.code = 0;
   }
   ctx.body = ctx.DATA;
