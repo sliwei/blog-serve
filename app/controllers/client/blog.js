@@ -288,7 +288,38 @@ const archives = async (ctx, next) => {
   ctx.DATA.data = res.rows;
   ctx.body = ctx.DATA;
 };
-console.log('')
+
+/**
+ * lw 分类
+ */
+const category = async (ctx, next) => {
+  let categoryNum = await VBstuBlog.findAll({
+    where: {is_draft: 0, is_del: 0},
+    attributes: [['category_name', 'name'], ['category_id', 'id'], [sequelize.fn('COUNT', sequelize.col('category_id')), 'num']],
+    group: 'category_id',
+  });
+  let category = await BstuCategory.findAll({
+    where: {is_del: 0},
+    order: [
+      ['id', 'DESC']
+    ],
+  });
+
+  categoryNum = JSON.parse(JSON.stringify(categoryNum));
+  category = JSON.parse(JSON.stringify(category));
+
+  category.forEach((item, i) => {
+    item.num = 0;
+    categoryNum.forEach((category) => {
+      if(item.id === category.id) {
+        item.num = category.num;
+      }
+    })
+  })
+
+  ctx.DATA.data = category;
+  ctx.body = ctx.DATA;
+};
 
 module.exports = {
   list,
@@ -301,4 +332,5 @@ module.exports = {
   num,
   tags: tag_list,
   archives,
+  category,
 };

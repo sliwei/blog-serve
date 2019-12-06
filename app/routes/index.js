@@ -7,7 +7,7 @@ const {checkToken} = require('../utils/tool/token');
 // 验证码校验
 const {checkCode} = require('../utils/tool/verification');
 
-const {list, search, neighbor, clientDetail, does, recent, blogFriendList, num, tags, archives} = require('../controllers/client/blog');
+const {list, search, neighbor, clientDetail, does, recent, blogFriendList, num, tags, archives, category} = require('../controllers/client/blog');
 const {get, post} = require('../controllers/test');
 const {sys} = require('../controllers/manage/admin');
 const {server_list, edit, blog_status, detail} = require('../controllers/manage/blog');
@@ -34,6 +34,7 @@ router.get('/blog/client/blog/friend_list', blogFriendList);
 router.get('/blog/client/blog/num', num);
 router.get('/blog/client/blog/tags', tags);
 router.get('/blog/client/blog/archives', archives);
+router.get('/blog/client/blog/category', category);
 // test
 router.get('/blog/test/get', get);
 router.post('/blog/test/post', post);
