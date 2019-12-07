@@ -1,6 +1,8 @@
 const svgCaptcha = require('svg-captcha');
 const md5 = require('js-md5');
+const Geetest = require('gt3-sdk');
 const conf = require('../../config');
+const gt = require('../../config/gt');
 
 /**
  * 生成数字字母验证码
@@ -17,7 +19,7 @@ const code = async function (ctx, next) {
     size: 4,
     ignoreChars: '0o1iLlI',
     noise: 2,
-    color: true,
+    color: false,
     // background: '#fff'
   });
   let key = md5(`${conf.verificationObs}${captcha.text.toLowerCase()}`);
@@ -28,6 +30,25 @@ const code = async function (ctx, next) {
   ctx.body = ctx.DATA;
 };
 
+/**
+ * 极验
+ */
+const gtCode = async function (ctx, next) {
+  var captcha = new Geetest(gt);
+  const code = await new Promise((resolve, reject) => {
+    captcha.register(null, function (err, data) {
+      if (err) {
+        reject(err)
+        return;
+      }
+      resolve(data);
+    });
+  });
+  ctx.DATA.data = code;
+  ctx.body = ctx.DATA;
+};
+
 module.exports = {
   code,
+  gtCode
 };

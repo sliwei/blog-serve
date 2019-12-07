@@ -5,7 +5,7 @@ const parameter = require('../utils/parameter');
 // token校验
 const {checkToken} = require('../utils/tool/token');
 // 验证码校验
-const {checkCode} = require('../utils/tool/verification');
+const {checkCode, checkGtCode} = require('../utils/tool/verification');
 
 const {list, search, neighbor, clientDetail, does, recent, blogFriendList, num, tags, archives, category} = require('../controllers/client/blog');
 const {get, post} = require('../controllers/test');
@@ -19,7 +19,7 @@ const {friend_list, operation_friend} = require('../controllers/manage/friend');
 const {info, login, register} = require('../controllers/manage/login');
 const {tag_list, operation_tag} = require('../controllers/manage/tag');
 const {edit_user} = require('../controllers/manage/user');
-const {code} = require('../controllers/manage/verification');
+const {code, gtCode} = require('../controllers/manage/verification');
 const {index} = require('../controllers/index');
 const {fzf} = require('../controllers/fzf');
 
@@ -65,6 +65,7 @@ router.post('/blog/manage/friend/operation_friend', checkToken, operation_friend
 // login
 router.get('/blog/manage/login/info', checkToken, info);
 router.post('/blog/manage/login/login', checkCode, parameter, login);
+router.post('/blog/manage/login/gt_login', checkGtCode, login);
 router.post('/blog/manage/login/register', checkCode, parameter, register);
 // tag
 router.get('/blog/manage/tag/tag_list', checkToken, tag_list);
@@ -73,6 +74,7 @@ router.post('/blog/manage/tag/operation_tag', checkToken, operation_tag);
 router.post('/blog/manage/user/edit_user', checkToken, edit_user);
 // verification
 router.get('/blog/manage/verification/code', parameter, code);
+router.get('/blog/manage/verification/gtCode', gtCode);
 // index
 router.get('/', index);
 // fzf
