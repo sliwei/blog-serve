@@ -4,10 +4,10 @@
  */
 module.exports = {
   database: 'bdm296810572_db',
-  username: 'admin',
-  password: 'lw555wam.',
+  username: 'root',
+  password: '123456',
   conf: {
-    host: 'bstu.cn',
+    host: '127.0.0.1',
     port: '3306',
     dialect: 'mysql',
     pool: {
