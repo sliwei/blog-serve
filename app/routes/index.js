@@ -22,6 +22,7 @@ const {edit_user} = require('../controllers/manage/user');
 const {code, gtCode} = require('../controllers/manage/verification');
 const {index} = require('../controllers/index');
 const {fzf} = require('../controllers/fzf');
+const {type, data} = require('../controllers/client/expenses');
 
 // client blog
 router.get('/blog/client/blog/list', list);
@@ -42,7 +43,7 @@ router.post('/blog/test/post', post);
 router.get('/blog/manage/admin/sys', checkToken, sys);
 // blog
 router.get('/blog/manage/blog/server_list', checkToken, server_list);
-router.post('/blog/manage/blog/edit', checkToken, edit);
+router.post('/blog/manage/blog/edit', checkGtCode, checkToken, edit);
 router.post('/blog/manage/blog/blog_status', checkToken, blog_status);
 router.get('/blog/manage/blog/detail', checkToken, detail);
 // common
@@ -75,6 +76,9 @@ router.post('/blog/manage/user/edit_user', checkToken, edit_user);
 // verification
 router.get('/blog/manage/verification/code', parameter, code);
 router.get('/blog/manage/verification/gtCode', gtCode);
+// expenses
+router.get('/blog/ex/type', type);
+router.get('/blog/ex/data', data);
 // index
 router.get('/', index);
 // fzf

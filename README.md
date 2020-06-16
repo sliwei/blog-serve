@@ -86,4 +86,5 @@ nunjucks|html模板
 parameter|数据校验
 sequelize|数据库ORM
 svg-captcha|图片验证码生成工具
+geetest|极验接入
 swagger-injector|接口文档
