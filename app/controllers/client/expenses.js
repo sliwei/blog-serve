@@ -14,7 +14,7 @@ const type = async (ctx, next) => {
 const data = async (ctx, next) => {
   ctx.DATA.data = await VExView.findAll({
     order: [
-      ['date', 'DESC']
+      ['date']
     ],
   });
   ctx.body = ctx.DATA;
