@@ -47,7 +47,7 @@ router.post('/blog/manage/blog/edit', checkGtCode, checkToken, edit);
 router.post('/blog/manage/blog/blog_status', checkToken, blog_status);
 router.get('/blog/manage/blog/detail', checkToken, detail);
 // common
-router.post('/blog/manage/common/upload', checkToken, upload);
+router.post('/blog/manage/common/upload', upload);
 // category
 router.get('/blog/manage/category/category_list', checkToken, category_list);
 router.post('/blog/manage/category/operation_category', checkToken, operation_category);
