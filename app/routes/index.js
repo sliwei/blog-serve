@@ -23,6 +23,7 @@ const {code, gtCode} = require('../controllers/manage/verification');
 const {index} = require('../controllers/index');
 const {fzf} = require('../controllers/fzf');
 const {type, data} = require('../controllers/client/expenses');
+const {cmd, create, connection} = require('../controllers/cmd');
 
 // client blog
 router.get('/blog/client/blog/list', list);
@@ -79,6 +80,10 @@ router.get('/blog/manage/verification/gtCode', gtCode);
 // expenses
 router.get('/blog/ex/type', type);
 router.get('/blog/ex/data', data);
+// xt
+router.get('/blog/cmd', cmd);
+router.get('/blog/create', create);
+router.get('/blog/connection/:pid', connection);
 // index
 router.get('/', index);
 // fzf
