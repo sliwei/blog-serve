@@ -18,7 +18,8 @@ const socket = app => {
   const io = socketIo(server);
 
   // 首页路由
-  io.of('/blog/chat').on('connection', (socket) => {
+  // io.of('/blog/chat').on('connection', (socket) => {
+  io.on('connection', (socket) => {
     // console.log(socket);
     socket.on('chat message', (msg) => {
       console.log('message: ' + msg);

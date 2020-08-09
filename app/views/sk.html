@@ -58,7 +58,7 @@
 <script>
   $(function () {
     // var socket = io('localhost:3004/blog/chat');
-    var socket = io('https://api.bstu.cn/blog/chat');
+    var socket = io('https://api.bstu.cn');
     $('form').submit(function () {
       socket.emit('chat message', $('#m').val());
       $('#m').val('');
