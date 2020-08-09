@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var server = require('../app');
 var conf = require('../app/config');
 var debug = require('debug')('demo:server');
 var http = require('http');
@@ -19,7 +19,7 @@ var port = normalizePort(conf.port || '3000');
  * Create HTTP server.
  */
 
-var server = http.createServer(app.callback());
+// var server = http.createServer(app.callback());
 
 /**
  * Listen on provided port, on all network interfaces.

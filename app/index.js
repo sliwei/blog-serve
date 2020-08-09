@@ -11,8 +11,8 @@ const colors = require('colors');
 const {resolve} = require('path');
 const swagger = require('swagger-injector');
 const mysql = require('mysql2');
-const websocket = require('koa-easy-ws')
-const https = require('https');
+// const websocket = require('koa-easy-ws')
+// const https = require('https');
 const fs = require('fs');
 
 const conf = require('./config');
@@ -42,12 +42,12 @@ app.use(cors({
   allowHeaders: ["Content-Type", "Authorization", "Accept"]
 }));
 
-const server = https.createServer({
-  cert: fs.readFileSync(conf.ssh_options.cert),
-  key: fs.readFileSync(conf.ssh_options.key),
-}, app.callback());
-
-app.use(websocket('wss', {wsOptions: {server}}))
+// const server = https.createServer({
+//   cert: fs.readFileSync(conf.ssh_options.cert),
+//   key: fs.readFileSync(conf.ssh_options.key),
+// }, app.callback());
+//
+// app.use(websocket('wss', {wsOptions: {server}}))
 
 // 返回美化json
 app.use(json());
@@ -168,4 +168,8 @@ app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
 
-module.exports = app;
+// socket连接
+const socket = require('./controllers/io')
+const server = socket(app)
+
+module.exports = server;

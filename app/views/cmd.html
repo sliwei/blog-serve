@@ -34,7 +34,7 @@
     $.ajax({
       url: '/blog/create',
       success: function (res) {
-        var webSocket = CreateWebSocket("wss://api.bstu.cn/blog/connection/" + res);
+        var webSocket = CreateWebSocket("ws://localhost:3004/blog/connection/" + res);
         /* 接收到服务端的消息时 */
         webSocket.onmessage = function (msg) {
           /* 写到term */

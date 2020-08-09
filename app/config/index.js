@@ -14,6 +14,7 @@ module.exports = {
     path: '/',
     httpOnly: false
   },
+  socket_safe: true,
   ssh_options: {      // https证书
     key: '/etc/letsencrypt/live/api.bstu.cn/privkey.pem',
     cert: '/etc/letsencrypt/live/api.bstu.cn/fullchain.pem'
