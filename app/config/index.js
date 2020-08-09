@@ -16,7 +16,12 @@ module.exports = {
   },
   socket_safe: true,
   ssh_options: {      // https证书
+    // key: '/Users/admin/app/privkey.pem',
+    // ca: '/Users/admin/app/chain.pem',
+    // cert: '/Users/admin/app/fullchain.pem'
+
     key: '/etc/letsencrypt/live/api.bstu.cn/privkey.pem',
+    ca: '/etc/letsencrypt/live/api.bstu.cn/chain.pem',
     cert: '/etc/letsencrypt/live/api.bstu.cn/fullchain.pem'
   },
 };

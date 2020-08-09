@@ -169,7 +169,7 @@ app.on('error', (err, ctx) => {
 });
 
 // socket连接
-// const socket = require('./controllers/io')
-// const server = socket(app)
+const socket = require('./controllers/io')
+const server = socket(app)
 
-module.exports = app;
+module.exports = server;

@@ -9,8 +9,10 @@ const socket = app => {
   if (conf.socket_safe) {
     options = {
       key: fs.readFileSync(conf.ssh_options.key),
+      ca: fs.readFileSync(conf.ssh_options.ca),
       cert: fs.readFileSync(conf.ssh_options.cert)
     };
+    console.log(options);
     server = https.createServer(options, app.callback())
   } else {
     server = http.createServer(app.callback())
@@ -20,6 +22,7 @@ const socket = app => {
   // 首页路由
   // io.of('/blog/chat').on('connection', (socket) => {
   io.on('connection', (socket) => {
+    console.log('aaa');
     // console.log(socket);
     socket.on('chat message', (msg) => {
       console.log('message: ' + msg);
