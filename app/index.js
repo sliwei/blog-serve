@@ -45,7 +45,7 @@ app.use(cors({
 const server = https.createServer({
   cert: fs.readFileSync(conf.ssh_options.cert),
   key: fs.readFileSync(conf.ssh_options.key),
-});
+}, app.callback());
 
 app.use(websocket('wss', {wsOptions: {server}}))
 
