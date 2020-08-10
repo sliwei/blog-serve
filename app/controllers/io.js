@@ -35,7 +35,8 @@ const socket = app => {
 
     socket.emit('chat message', '\x1b[0;36mwelcome \x1b[1;31mXterm\x1b[1;36m!\x1b[0m\r\n')
     socket.emit('chat message', 'ioId: \x1b[1;32m' + ioId + '\x1b[m\r\n')
-    socket.emit('chat message', '实时日志: \x1b[0;36mpm2 logs 1v1-crm-graphql\x1b[m\r\n')
+    // socket.emit('chat message', '实时日志: \x1b[0;36mpm2 logs 1v1-crm-graphql\x1b[m\r\n')
+    socket.emit('chat message', '实时日志: \x1b[0;36mtail -20f [number] /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
     socket.emit('chat message', '历史日志: \x1b[0;36mtail -n [number] /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
 
     // 1:30:47
@@ -46,25 +47,22 @@ const socket = app => {
     // https://bixense.com/clicolors/
 
     socket.on('chat message', (msg) => {
-      console.log('message: ' + msg);
       term.write(msg);
     });
     term.on('data', function (data) {
       try {
-        console.log(data);
-        if (data.includes('bash-3.2$')) {
-          socket.emit('chat message', '\x1b[1;36m' + data + '\x1b[m')
-        } else {
+        // if (data.includes('bash-3.2$')) {
+          // socket.emit('chat message', '\x1b[1;36m' + data + '\x1b[m')
+        // } else {
           socket.emit('chat message', data)
-        }
+        // }
       } catch (ex) {
         // The WebSocket is not open, ignore
       }
     });
     socket.on('disconnect', () => {
-      console.log('user disconnected');
       term.kill();
-      console.log('Closed terminal ' + ioId);
+      console.log('user disconnected. Closed terminal ' + ioId);
       // Clean things up
       delete terminals[ioId];
       // delete logs[ioId];
