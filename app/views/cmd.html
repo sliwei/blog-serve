@@ -4,70 +4,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>welcome Xterm!</title>
-  <link rel="stylesheet" href="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/xterm.min.css" />
-  <link rel="stylesheet" href="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/index.css" />
+  <link rel="stylesheet" href="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/xterm.min.css"/>
+  <link rel="stylesheet" href="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/index.css"/>
   <script src="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/jquery.min.js"></script>
   <script src="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/xterm.min.js"></script>
   <script src="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/fit.min.js"></script>
+  <script src="https://bstu.oss-cn-shenzhen.aliyuncs.com/images/x/socket.io.js"></script>
 </head>
 
 <body>
-  <div class="page-container">
-    <div class="terminal-container"></div>
-    <div class="info-overlay">
-      <div class="info-box"></div>
-    </div>
+<div class="page-container">
+  <div class="terminal-container"></div>
+  <div class="info-overlay">
+    <div class="info-box"></div>
   </div>
-  <script>
-    /* 封装 WebSocket 实例化的方法  */
-    var CreateWebSocket = (function () {
-      return function (urlValue) {
-        if (window.WebSocket) return new WebSocket(urlValue);
-        if (window.MozWebSocket) return new MozWebSocket(urlValue);
-        return false;
-      }
-    })();
-    /* 实例化 WebSocket 连接对象, 地址为 ws 协议 */
-    $.ajax({
-      url: '/blog/create',
-      success: function (res) {
-        var webSocket = CreateWebSocket("ws://localhost:3004/blog/connection/" + res);
-        /* 接收到服务端的消息时 */
-        webSocket.onmessage = function (msg) {
-          /* 写到term */
-          term.write(msg.data)
-        };
-        /* 关闭时 */
-        webSocket.onclose = function () {
-          console.log("关闭连接");
-        };
-        /* 关闭消息 */
-        // webSocket.close();
+</div>
+<script>
+  // $.ajax({
+  //   url: '/blog/io/create',
+  //   success: function (res) {
+      // var socket = io('https://api.bstu.cn?pid=' + res);
+      // var socket = io('http://localhost:3004');
+      var socket = io('https://api.bstu.cn');
 
-        Terminal.applyAddon(fit)
-        var term = new Terminal({ rendererType: "canvas" });
-        // new fit(term);
-        // console.log(fit);
+      Terminal.applyAddon(fit)
+      var term = new Terminal({rendererType: "canvas"});
+      // new fit(term);
+      // console.log(fit);
+      term.setOption("fontSize", 16);
+      term.setOption("cursorBlink", true);
+      /* 打开窗体 */
+      term.open(document.querySelector('.terminal-container'));
 
-        term.setOption("fontSize", 16);
-        term.setOption("cursorBlink", true);
-        term.open(document.querySelector('.terminal-container'));
+      term.fit();
 
-        term.fit();
+      // term.write('\x1b[1;36mwelcome \x1b[1;31mXterm\x1b[1;36m!\x1b[0m\r\n');
 
-        term.write('\x1b[1;36mwelcome \x1b[1;31mXterm\x1b[1;36m!\x1b[0m\r\n');
-        /* 打开窗体 */
-        // term.open(document.getElementById('terminal'));
-        /* 发送消息 */
-        term.onData(data => {
-          webSocket.send(data);
-        });
-      }
-    })
-  </script>
+      /* 发送消息 */
+      term.onData(data => {
+        socket.emit('chat message', data);
+      });
+
+      /*接收消息*/
+      socket.on('chat message', function (msg) {
+        term.write(msg)
+      });
+    // }
+  // })
+</script>
 </body>
 
 </html>

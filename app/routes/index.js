@@ -24,6 +24,7 @@ const {index} = require('../controllers/index');
 const {fzf} = require('../controllers/fzf');
 const {type, data} = require('../controllers/client/expenses');
 const {cmd, create, connection, socket} = require('../controllers/cmd');
+const {io, ioCreate} = require('../controllers/io');
 
 // client blog
 router.get('/blog/client/blog/list', list);
@@ -84,8 +85,9 @@ router.get('/blog/ex/data', data);
 router.get('/blog/cmd', cmd);
 router.get('/blog/create', create);
 router.get('/blog/connection/:pid', connection);
-
-router.get('/blog/socket', socket);
+// io
+router.get('/blog/io', io);
+router.get('/blog/io/create', ioCreate);
 // index
 router.get('/', index);
 // fzf

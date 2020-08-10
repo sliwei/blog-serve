@@ -96,14 +96,4 @@ const cmd = async (ctx, next) => {
   await ctx.render('sk');
 }
 
-const socket = async (ctx, next) => {
-  console.log(ctx.websocket);
-  console.log(this.websocket);
-  this.websocket.send('Hello World');
-  this.websocket.on('message', (message) => {
-    console.log(message);
-  });
-  await next(ctx);
-}
-
-module.exports = {create, connection, cmd, socket};
+module.exports = {create, connection, cmd};
