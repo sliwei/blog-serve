@@ -45,7 +45,7 @@ router.post('/blog/test/post', post);
 router.get('/blog/manage/admin/sys', checkToken, sys);
 // blog
 router.get('/blog/manage/blog/server_list', checkToken, server_list);
-router.post('/blog/manage/blog/edit', checkGtCode, checkToken, edit);
+router.post('/blog/manage/blog/edit', checkToken, edit);
 router.post('/blog/manage/blog/blog_status', checkToken, blog_status);
 router.get('/blog/manage/blog/detail', checkToken, detail);
 // common
