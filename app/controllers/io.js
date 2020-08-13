@@ -36,8 +36,8 @@ const socket = app => {
     socket.emit('chat message', '\x1b[0;36mwelcome \x1b[1;31mXterm\x1b[1;36m!\x1b[0m\r\n')
     socket.emit('chat message', 'ioId: \x1b[1;32m' + ioId + '\x1b[m\r\n')
     // socket.emit('chat message', '实时日志: \x1b[0;36mpm2 logs 1v1-crm-graphql\x1b[m\r\n')
-    socket.emit('chat message', '实时日志: \x1b[0;36mtail -20f [number] /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
-    socket.emit('chat message', '历史日志: \x1b[0;36mtail -n [number] /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
+    socket.emit('chat message', '实时日志: \x1b[0;36mtail -20f /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
+    socket.emit('chat message', '历史日志: \x1b[0;36mtail -n 100 /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
 
     // 1:30:47
     // 1:字体大小 0 细 1 粗
