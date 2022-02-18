@@ -10,7 +10,8 @@ ROOT="/data/git/${NAME}"
 RUN="/data/wwwroot/${NAME}"
 
 yarn
-cp -rf ${CONF}/oss.js ${ROOT}/app/config/oss.js
+cp -rf ${CONF}/mysql-orm.js ${ROOT}/app/config/mysql.js
+cp -rf ${CONF}/gt.js ${ROOT}/app/config/gt.js
 yarn build
 mkdir -p ${RUN}
 mkdir -p ${RUN}/app

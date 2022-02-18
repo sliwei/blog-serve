@@ -60,6 +60,7 @@ typings/
 # next.js build output
 .next
 .idea
+app/config/gt.js
 app/config/mysql.js
 package-lock.json
 app/server.js
