@@ -24,6 +24,10 @@ const socket = app => {
   // io.of('/blog/chat').on('connection', (socket) => {
   io.on('connection', (socket) => {
 
+    console.log(socket._query);
+    console.log(socket.request.headers);
+    console.log(socket.handshake);
+
     const pid = socket.handshake.query
     const ioId = socket.id
 
@@ -75,6 +79,10 @@ const io = async (ctx, next) => {
   await ctx.render('cmd');
 }
 
+const re = async (ctx, next) => {
+  await ctx.render('re');
+}
+
 const create = (ioId) => {
   // let cols = parseInt(ctx.query.cols)
   // let rows = parseInt(ctx.query.rows)
@@ -115,4 +123,4 @@ const ioCreate = async (ctx, next) => {
   ctx.body = term.pid.toString();
 };
 
-module.exports = {socket, io, ioCreate};
+module.exports = {socket, io, ioCreate, re};

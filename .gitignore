@@ -62,3 +62,4 @@ typings/
 .idea
 app/config/mysql.js
 package-lock.json
+app/server.js

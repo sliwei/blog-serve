@@ -28,7 +28,11 @@
   //   success: function (res) {
       // var socket = io('https://api.bstu.cn?pid=' + res);
       // var socket = io('http://localhost:3004');
-      var socket = io();
+      var socket = io(null, {
+        extraHeaders: {
+          Authorization: '123'
+        }
+      });
 
       Terminal.applyAddon(fit)
       var term = new Terminal({rendererType: "canvas"});

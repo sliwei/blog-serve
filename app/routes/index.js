@@ -24,7 +24,8 @@ const {index} = require('../controllers/index');
 const {fzf} = require('../controllers/fzf');
 const {type, data} = require('../controllers/client/expenses');
 const {cmd, create, connection, socket} = require('../controllers/cmd');
-const {io, ioCreate} = require('../controllers/io');
+const {io, ioCreate, re} = require('../controllers/io');
+const {deploy} = require('../controllers/manage/devops');
 
 // client blog
 router.get('/blog/client/blog/list', list);
@@ -77,7 +78,7 @@ router.post('/blog/manage/tag/operation_tag', checkToken, operation_tag);
 router.post('/blog/manage/user/edit_user', checkToken, edit_user);
 // verification
 router.get('/blog/manage/verification/code', parameter, code);
-router.get('/blog/manage/verification/gtCode', gtCode);
+router.post('/blog/manage/verification/gtCode', gtCode);
 // expenses
 router.get('/blog/ex/type', type);
 router.get('/blog/ex/data', data);
@@ -88,6 +89,25 @@ router.get('/blog/connection/:pid', connection);
 // io
 router.get('/blog/io', io);
 router.get('/blog/io/create', ioCreate);
+router.get('/re', re);
+// devops
+router.post('/blog/manage/devops/deploy', checkToken, deploy);
+
+const fetch = require('node-fetch');
+router.get('/validate', async (ctx) => {
+  console.log(ctx.query.token);
+  const url = 'https://www.recaptcha.net/recaptcha/api/siteverify'
+  const secret_key = '6LdOO74ZAAAAAFn3LrtVVW6tR8-PpWcq7i1s7RDX'
+  const token = ctx.query.token
+  const response = await fetch(`${url}?secret=${secret_key}&response=${token}`, {
+    method: 'post',
+  });
+  const dat = await response.json();
+  console.log(dat);
+  ctx.DATA.data = dat;
+  ctx.DATA.message = 'This is the GET test.';
+  ctx.body = ctx.DATA;
+});
 // index
 router.get('/', index);
 // fzf
