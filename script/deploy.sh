@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#cd /data/git
-cd /Users/awei/project/wei/testest
+cd /data/git
+#cd /Users/awei/project/wei/testest
 
 prjName=$1
 branch=$2

@@ -17,6 +17,7 @@ mkdir -p ${RUN}
 mkdir -p ${RUN}/app
 cp -rf ${ROOT}/app/public ${RUN}/app/public
 cp -rf ${ROOT}/app/views ${RUN}/app/views
+cp -rf ${ROOT}/script ${RUN}/script
 cp -rf ${ROOT}/app/server.js ${RUN}/app/server.js
 cp -rf ${ROOT}/package.json ${RUN}/package.json
 cd ${RUN}
