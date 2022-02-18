@@ -20,6 +20,7 @@ cp -rf ${ROOT}/app/views ${RUN}/app/views
 cp -rf ${ROOT}/app/server.js ${RUN}/app/server.js
 cp -rf ${ROOT}/package.json ${RUN}/package.json
 cd ${RUN}
+yarn
 pm2 info ${NAME}
 if [[ "$?" != "0" ]]; then
   yarn pm2

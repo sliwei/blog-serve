@@ -78,7 +78,7 @@ router.post('/blog/manage/tag/operation_tag', checkToken, operation_tag);
 router.post('/blog/manage/user/edit_user', checkToken, edit_user);
 // verification
 router.get('/blog/manage/verification/code', parameter, code);
-router.post('/blog/manage/verification/gtCode', gtCode);
+router.get('/blog/manage/verification/gtCode', gtCode);
 // expenses
 router.get('/blog/ex/type', type);
 router.get('/blog/ex/data', data);
