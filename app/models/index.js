@@ -15,6 +15,7 @@ const v_bstu_blog_tag = require('./v_bstu_blog_tag');
 const v_bstu_comment = require('./v_bstu_comment');
 const ex_type = require('./ex_type');
 const v_ex_view = require('./v_ex_view');
+const bstu_devops = require('./bstu_devops');
 
 const BstuBlog = bstu_blog(sequelize, Sequelize);
 const BstuBlogTag = bstu_blog_tag(sequelize, Sequelize);
@@ -31,6 +32,7 @@ const VBstuBlogTag = v_bstu_blog_tag(sequelize, Sequelize);
 const VBstuComment = v_bstu_comment(sequelize, Sequelize);
 const ExYype = ex_type(sequelize, Sequelize);
 const VExView = v_ex_view(sequelize, Sequelize);
+const BstuDevops = bstu_devops(sequelize, Sequelize);
 
 /**
  * Associations - 关联
@@ -66,4 +68,5 @@ module.exports = {
   Sequelize,
   ExYype,
   VExView,
+  BstuDevops,
 };

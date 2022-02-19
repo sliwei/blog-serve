@@ -25,7 +25,9 @@ const {fzf} = require('../controllers/fzf');
 const {type, data} = require('../controllers/client/expenses');
 const {cmd, create, connection, socket} = require('../controllers/cmd');
 const {io, ioCreate, re} = require('../controllers/io');
-const {deploy} = require('../controllers/manage/devops');
+const {build_devops,
+    devops_list,
+  operation_devops} = require('../controllers/manage/devops');
 
 // client blog
 router.get('/blog/client/blog/list', list);
@@ -91,7 +93,9 @@ router.get('/blog/io', io);
 router.get('/blog/io/create', ioCreate);
 router.get('/re', re);
 // devops
-router.post('/blog/manage/devops/deploy', checkToken, deploy);
+router.post('/blog/manage/devops/build_devops', checkToken, build_devops);
+router.post('/blog/manage/devops/devops_list', checkToken, devops_list);
+router.post('/blog/manage/devops/operation_devops', checkToken, operation_devops);
 
 const fetch = require('node-fetch');
 router.get('/validate', async (ctx) => {
