@@ -6,6 +6,7 @@ const fs = require('fs');
  */
 const upload = async (ctx, next) => {
   const file = ctx.request.files.file;
+  console.log(file.path);
   let options = {
     url: 'http://0.0.0.0:3005/core/oss/upload',
     method: 'POST',
