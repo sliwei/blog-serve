@@ -11,7 +11,7 @@ local RUN="/data/wwwroot/" + NAME;
     "steps": [
       {
         "name": "copy",
-        "image": "node:14.17.1",
+        "image": "node:14",
         "volumes": [
           {
             "name": "config-conf",
