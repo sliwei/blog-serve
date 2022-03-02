@@ -19,6 +19,7 @@ local RUN="/data/wwwroot/" + NAME;
           }
         ],
         "commands": [
+          "pwd",
           "ls -l",
           /*
           "yarn",
