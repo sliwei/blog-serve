@@ -1,6 +1,6 @@
-local NAME="blog-serve";
+local NAME="blog-serve-test";
 local CONF="/data/config";
-local ROOT="/data/git/" + NAME;
+local ROOT="/drone/src";
 local RUN="/data/wwwroot/" + NAME;
 
 [
@@ -10,28 +10,30 @@ local RUN="/data/wwwroot/" + NAME;
     "name": "deploy",
     "steps": [
       {
-        "name": "copy",
+        "name": "build & copy",
         "image": "node:14",
         "volumes": [
           {
             "name": "config-conf",
             "path": CONF
+          },
+          {
+            "name": "run-conf",
+            "path": RUN
           }
         ],
         "commands": [
-          "pwd",
-          "ls -l",
-          /*
           "yarn",
-          "cp -rf ${CONF}/mysql-orm.js ${ROOT}/app/config/mysql.js",
-          "cp -rf ${CONF}/gt.js ${ROOT}/app/config/gt.js",
-          "yarn",
-          "",
-          "",
-          "",
-          "",
-          "cp -rf /drone/src/http/* /nginx-conf"
-          */
+          "cp -rf "+CONF+"/mysql-orm.js "+ROOT+"/app/config/mysql.js",
+          "cp -rf "+CONF+"/gt.js "+ROOT+"/app/config/gt.js",
+          "yarn build",
+          "mkdir -p "+RUN,
+          "mkdir -p "+RUN+"/app",
+          "rm -rf "+RUN+"/app/public/* && cp -rf "+ROOT+"/app/public "+RUN+"/app",
+          "rm -rf "+RUN+"/app/views/* && cp -rf "+ROOT+"/app/views "+RUN+"/app",
+          "rm -rf "+RUN+"/script/* && cp -rf "+ROOT+"/script "+RUN,
+          "cp -rf "+ROOT+"/app/server.js "+RUN+"/app/server.js",
+          "cp -rf "+ROOT+"/package.json "+RUN+"/package.json"
         ]
       }
 //      {
@@ -79,6 +81,12 @@ local RUN="/data/wwwroot/" + NAME;
         "name": "config-conf",
         "host": {
           "path": CONF
+        }
+      },
+      {
+        "name": "run-conf",
+        "host": {
+          "path": RUN
         }
       }
     ]
