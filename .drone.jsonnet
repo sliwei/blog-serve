@@ -39,7 +39,7 @@ local RUN="/data/wwwroot/" + NAME;
         ]
       },
       {
-        "name": "restart",
+        "name": "start || restart",
         "image": "appleboy/drone-ssh",
         "settings": {
           "host": "bstu.cn",
