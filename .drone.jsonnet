@@ -1,4 +1,4 @@
-local NAME="blog-serve-test";
+local NAME="blog-serve";
 local CONF="/data/config";
 local ROOT="/drone/src";
 local RUN="/data/wwwroot/" + NAME;
@@ -37,46 +37,47 @@ local RUN="/data/wwwroot/" + NAME;
           "cp -rf "+ROOT+"/yarn.lock "+RUN+"/yarn.lock",
           "cp -rf "+ROOT+"/processes.json "+RUN+"/processes.json"
         ]
+      },
+      {
+        "name": "restart",
+        "image": "appleboy/drone-ssh",
+        "settings": {
+          "host": "bstu.cn",
+          "username": "root",
+          "password": {
+            "from_secret": "ssh_key"
+          },
+          "port": 22,
+          "command_timeout": "10m",
+          "script_stop": false,
+          "script": [
+            "cd "+RUN,
+            "yarn",
+            "pm2 info "+NAME,
+            "test $? -eq 0 && (yarn restart && echo Restart the success!) || (yarn pm2 && echo The first startup succeeded!)"
+          ]
+        }
+      },
+      {
+        "name": "notify",
+        "pull": "if-not-exists",
+        "image": "guoxudongdocker/drone-dingtalk:latest",
+        "settings": {
+          "token": {
+            "from_secret": "dingtalk_token"
+          },
+          "type": "markdown",
+          "message_color": true,
+          "message_pic": true,
+          "sha_link": true
+        },
+        "when": {
+          "status": [
+            "failure",
+            "success"
+          ]
+        }
       }
-//      {
-//        "name": "restart",
-//        "image": "appleboy/drone-ssh",
-//        "settings": {
-//          "host": "bstu.cn",
-//          "username": "root",
-//          "password": {
-//            "from_secret": "ssh_key"
-//          },
-//          "port": 22,
-//          "command_timeout": "10m",
-//          "script_stop": false,
-//          "script": [
-//            "nginx -t",
-//            "test $? -eq 0 && nginx -s reload || exit 1",
-//            "echo ✅ nginx restart complete~🎉"
-//          ]
-//        }
-//      },
-//      {
-//        "name": "notify",
-//        "pull": "if-not-exists",
-//        "image": "guoxudongdocker/drone-dingtalk:latest",
-//        "settings": {
-//          "token": {
-//            "from_secret": "dingtalk_token"
-//          },
-//          "type": "markdown",
-//          "message_color": true,
-//          "message_pic": true,
-//          "sha_link": true
-//        },
-//        "when": {
-//          "status": [
-//            "failure",
-//            "success"
-//          ]
-//        }
-//      }
     ],
     "volumes": [
       {
