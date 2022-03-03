@@ -3,7 +3,7 @@
  */
 const get = async (ctx, next) => {
   ctx.DATA.data = ctx.query;
-  ctx.DATA.message = 'This is the GET test.';
+  ctx.DATA.message = 'This is the GET test. test CICD';
   ctx.body = ctx.DATA;
 };
 
