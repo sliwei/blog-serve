@@ -33,7 +33,9 @@ local RUN="/data/wwwroot/" + NAME;
           "rm -rf "+RUN+"/app/views/* && cp -rf "+ROOT+"/app/views "+RUN+"/app",
           "rm -rf "+RUN+"/script/* && cp -rf "+ROOT+"/script "+RUN,
           "cp -rf "+ROOT+"/app/server.js "+RUN+"/app/server.js",
-          "cp -rf "+ROOT+"/package.json "+RUN+"/package.json"
+          "cp -rf "+ROOT+"/package.json "+RUN+"/package.json",
+          "cp -rf "+ROOT+"/yarn.lock "+RUN+"/yarn.lock",
+          "cp -rf "+ROOT+"/processes.json "+RUN+"/processes.json"
         ]
       }
 //      {
