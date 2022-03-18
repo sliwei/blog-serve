@@ -1,5 +1,7 @@
 # blog-serve
 
+[![Build Status](https://drone.bstu.cn/api/badges/sliwei/blog-serve/status.svg)](https://drone.bstu.cn/sliwei/blog-serve)
+
 > 博客服务中心
 
 ## Dev Setup
