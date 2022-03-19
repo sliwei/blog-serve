@@ -9,38 +9,38 @@ local RUN="/data/docker/" + NAME;
     "type": "docker",
     "name": "deploy",
     "steps": [
-      {
-        "name": "restore-cache",
-        "image": "drillster/drone-volume-cache",
-        "settings": {
-          "restore": true,
-          "mount": [
-            "./node_modules"
-          ]
-        },
-        "volumes": [
-          {
-            "name": "cache",
-            "path": "/cache"
-          }
-        ]
-      },
-      {
-        "name": "build & copy",
-        "image": "node:14",
-        "volumes": [
-          {
-            "name": "config-conf",
-            "path": CONF
-          }
-        ],
-        "commands": [
-          "yarn",
-          "cp -rf "+CONF+"/mysql-orm.js "+ROOT+"/app/config/mysql.js",
-          "cp -rf "+CONF+"/gt.js "+ROOT+"/app/config/gt.js",
-          "yarn build:live",
-        ]
-      },
+//      {
+//        "name": "restore-cache",
+//        "image": "drillster/drone-volume-cache",
+//        "settings": {
+//          "restore": true,
+//          "mount": [
+//            "./node_modules"
+//          ]
+//        },
+//        "volumes": [
+//          {
+//            "name": "cache",
+//            "path": "/cache"
+//          }
+//        ]
+//      },
+//      {
+//        "name": "build & copy",
+//        "image": "node:14",
+//        "volumes": [
+//          {
+//            "name": "config-conf",
+//            "path": CONF
+//          }
+//        ],
+//        "commands": [
+//          "yarn",
+//          "cp -rf "+CONF+"/mysql-orm.js "+ROOT+"/app/config/mysql.js",
+//          "cp -rf "+CONF+"/gt.js "+ROOT+"/app/config/gt.js",
+//          "yarn build:live",
+//        ]
+//      },
       {
         "name": "docker build&&push",
         "image": "plugins/docker",
