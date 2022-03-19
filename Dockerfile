@@ -1,6 +1,10 @@
 FROM node:14.17.1-alpine
 
-COPY node_modules dist script deploy.sh start.sh /app/
+COPY node_modules /app/node_modules
+COPY dist /app/dist
+COPY script /app/script
+COPY deploy.sh /app
+COPY start.sh /app
 
 #设置变量
 ENV DATABASE=""
