@@ -45,6 +45,22 @@ local RUN="/data/docker/" + NAME;
         "name": "docker build&&push",
         "image": "plugins/docker",
         "settings": {
+//          "username": "admin",
+//          "password": {
+//            "from_secret": "registry_password"
+//          },
+          "username": "sliwei",
+          "password": {
+            "from_secret": "docker_password"
+          },
+          "repo": "sliwei/"+NAME
+//          "registry": "registry.bstu.cn"
+        }
+      },
+      {
+        "name": "docker build&&push",
+        "image": "plugins/docker",
+        "settings": {
           "username": "admin",
           "password": {
             "from_secret": "registry_password"
