@@ -2,7 +2,7 @@ const svgCaptcha = require('svg-captcha');
 const md5 = require('js-md5');
 const Geetest = require('gt3-sdk');
 const conf = require('../../config');
-const gt = require('../../config/gt');
+
 
 /**
  * 生成数字字母验证码
@@ -34,7 +34,7 @@ const code = async function (ctx, next) {
  * 极验
  */
 const gtCode = async function (ctx, next) {
-  var captcha = new Geetest(gt);
+  var captcha = new Geetest(conf.gt);
   const code = await new Promise((resolve, reject) => {
     captcha.register(null, function (err, data) {
       if (err) {

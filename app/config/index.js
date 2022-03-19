@@ -1,26 +1,25 @@
 /**
- * lw 配置文件
+ * 配置文件
  */
-const db = require('./mysql');
+const env = require(`../../config/.env.${process.env.ENV}.js`)
 
-module.exports = {
+const config = {
+  mode: process.env.MODE, // development || production
   port: 3004, // 端口
-  db: db, // 数据库
-  tokenObs: 'blog-serve', // token混淆码
+  tokenObs: 'server', // token混淆码
   verificationObs: 'blog-serve', // 验证码混淆码
   verificationSta: true, // 启用验证码
   cookieOptions: {
-    maxAge: 1000 * 3600 * 48,
+    maxAge: 5 * 60 * 60 * 1000, // 毫秒
     path: '/',
     httpOnly: false
-  },
-  socket_safe: false,
-  ssh_options: {      // https证书
-    key: '/Users/admin/app/privkey.pem',
-    ca: '/Users/admin/app/chain.pem',
-    cert: '/Users/admin/app/fullchain.pem'
-    // key: '/etc/letsencrypt/live/api.bstu.cn/privkey.pem',
-    // ca: '/etc/letsencrypt/live/api.bstu.cn/chain.pem',
-    // cert: '/etc/letsencrypt/live/api.bstu.cn/fullchain.pem'
-  },
-};
+  }
+}
+// 合并环境配置到config
+Object.assign(config, env)
+
+console.log('模式:', process.env.MODE)
+console.log('环境:', process.env.ENV)
+console.log('Listening on port: http://localhost:%d', config.port)
+
+module.exports = config

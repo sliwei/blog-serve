@@ -1,7 +1,7 @@
 local NAME="blog-serve";
 local CONF="/data/config";
 local ROOT="/drone/src";
-local RUN="/data/wwwroot/" + NAME;
+local RUN="/data/docker/" + NAME;
 
 [
   {
@@ -32,10 +32,6 @@ local RUN="/data/wwwroot/" + NAME;
           {
             "name": "config-conf",
             "path": CONF
-          },
-          {
-            "name": "run-conf",
-            "path": RUN
           }
         ],
         "commands": [
@@ -43,16 +39,18 @@ local RUN="/data/wwwroot/" + NAME;
           "cp -rf "+CONF+"/mysql-orm.js "+ROOT+"/app/config/mysql.js",
           "cp -rf "+CONF+"/gt.js "+ROOT+"/app/config/gt.js",
           "yarn build",
-          "mkdir -p "+RUN,
-          "mkdir -p "+RUN+"/app",
-          "rm -rf "+RUN+"/app/public/* && cp -rf "+ROOT+"/app/public "+RUN+"/app",
-          "rm -rf "+RUN+"/app/views/* && cp -rf "+ROOT+"/app/views "+RUN+"/app",
-          "rm -rf "+RUN+"/script/* && cp -rf "+ROOT+"/script "+RUN,
-          "cp -rf "+ROOT+"/app/server.js "+RUN+"/app/server.js",
-          "cp -rf "+ROOT+"/package.json "+RUN+"/package.json",
-          "cp -rf "+ROOT+"/yarn.lock "+RUN+"/yarn.lock",
-          "cp -rf "+ROOT+"/processes.json "+RUN+"/processes.json"
+
         ]
+      },
+      {
+        "name": "docker build&&push",
+        "image": "drillster/drone-volume-cache",
+        "settings": {
+          "username": admin,
+          "password": "registry_password",
+          "repo": "registry.bstu.cn/admin/"+NAME,
+          "registry": "registry.bstu.cn"
+        }
       },
       {
         "name": "rebuild-cache",
@@ -84,9 +82,7 @@ local RUN="/data/wwwroot/" + NAME;
           "script_stop": false,
           "script": [
             "cd "+RUN,
-            "yarn",
-            "pm2 info "+NAME,
-            "test $? -eq 0 && (yarn restart && echo Restart the success!) || (yarn pm2 && echo The first startup succeeded!)"
+            "docker-compose up -d"
           ]
         }
       },
@@ -116,12 +112,6 @@ local RUN="/data/wwwroot/" + NAME;
         "name": "config-conf",
         "host": {
           "path": CONF
-        }
-      },
-      {
-        "name": "run-conf",
-        "host": {
-          "path": RUN
         }
       },
       {

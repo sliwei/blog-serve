@@ -1,23 +1,22 @@
 const http = require('http')
-const https = require('https');
 const socketIo = require('socket.io')
-const fs = require('fs');
-const conf = require('../config');
 const pty = require('node-pty');
 
 var terminals = {}, logs = {};
 const socket = app => {
   let server
-  if (conf.socket_safe) {
-    options = {
-      key: fs.readFileSync(conf.ssh_options.key),
-      ca: fs.readFileSync(conf.ssh_options.ca),
-      cert: fs.readFileSync(conf.ssh_options.cert)
-    };
-    server = https.createServer(options, app.callback())
-  } else {
-    server = http.createServer(app.callback())
-  }
+  // if (conf.socket_safe) {
+  //   options = {
+  //     key: fs.readFileSync(conf.ssh_options.key),
+  //     ca: fs.readFileSync(conf.ssh_options.ca),
+  //     cert: fs.readFileSync(conf.ssh_options.cert)
+  //   };
+  //   server = https.createServer(options, app.callback())
+  // } else {
+  // 使用koa的端口做socket的端口，协议是根据koa定的
+  // 如果不配置路由，默认是 xxx.com/socket.io/ 路径，客户端连接默认就是这个路径
+  server = http.createServer(app.callback())
+  // }
   const io = socketIo(server);
 
   // 首页路由

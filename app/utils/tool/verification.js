@@ -2,7 +2,6 @@ const conf = require('../../config');
 const Geetest = require('gt3-sdk');
 const md5 = require('js-md5');
 const {CustomError, HttpError} = require('./error');
-const gt = require('../../config/gt');
 
 /**
  * 检测验证码正确性
@@ -42,7 +41,7 @@ const checkCode = async (ctx, next) => {
  * @returns {Promise<void>}
  */
 const checkGtCode = async (ctx, next) => {
-  var captcha = new Geetest(gt);
+  var captcha = new Geetest(conf.gt);
   console.log(ctx.request.body);
   const gtSta = await new Promise((resolve, reject) => {
     captcha.validate(false, {

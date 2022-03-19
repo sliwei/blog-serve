@@ -85,13 +85,13 @@ router.get('/blog/manage/verification/gtCode', gtCode);
 router.get('/blog/ex/type', type);
 router.get('/blog/ex/data', data);
 // xt
-router.get('/blog/cmd', cmd);
-router.get('/blog/create', create);
-router.get('/blog/connection/:pid', connection);
+// router.get('/blog/cmd', cmd);
+// router.get('/blog/create', create);
+// router.get('/blog/connection/:pid', connection);
 // io
-router.get('/blog/io', io);
-router.get('/blog/io/create', ioCreate);
-router.get('/re', re);
+// router.get('/blog/io', io);
+// router.get('/blog/io/create', ioCreate);
+// router.get('/re', re);
 // devops
 router.post('/blog/manage/devops/build_devops', checkToken, build_devops);
 router.post('/blog/manage/devops/devops_list', checkToken, devops_list);

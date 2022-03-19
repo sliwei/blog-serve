@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  blog-serve:
+    container_name: blog-serve
+    image: blog-serve
+    ports:
+      - 8889:3004
+    environment:
+      - DATABASE=db
+      - USERNAME=user
+      - PASSWORD=password
+      - HOST=locashot
+      - PORT=3306
+      - GT_ID=xx
+      - GT_KEY=xx
