@@ -8,4 +8,4 @@ sed -i "s/##PORT##/${PORT}/" app/server.js
 sed -i "s/##GT_ID##/${GT_ID}/" app/server.js
 sed -i "s/##GT_KEY##/${GT_KEY}/" app/server.js
 # 启动应用
-node app/server.js
+node dist/server.js

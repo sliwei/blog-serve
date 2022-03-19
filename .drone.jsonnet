@@ -1,7 +1,6 @@
 local NAME="blog-serve";
 local CONF="/data/config";
-local ROOT="/drone/src";
-local RUN="/data/docker/" + NAME;
+local SOURCE="/data/docker/" + NAME+"/source/";
 
 [
   {
@@ -32,27 +31,35 @@ local RUN="/data/docker/" + NAME;
           {
             "name": "config-conf",
             "path": CONF
+          },
+          {
+            "name": "source-conf",
+            "path": SOURCE
           }
         ],
         "commands": [
           "yarn",
-          "cp -rf "+CONF+"/mysql-orm.js "+ROOT+"/app/config/mysql.js",
-          "cp -rf "+CONF+"/gt.js "+ROOT+"/app/config/gt.js",
+          "cp -rf "+CONF+"/mysql-orm.js app/config/mysql.js",
+          "cp -rf "+CONF+"/gt.js app/config/gt.js",
           "yarn build:live",
+          "mkdir -p "+SOURCE, # 创建源码目录
+          "rm -rf "+SOURCE+"*", # 删除以前的源码
+          "cp -rf node_modules dist script deploy.sh start.sh "+SOURCE
         ]
       },
-      {
-        "name": "docker build&&push",
-        "image": "plugins/docker",
-        "settings": {
-          "username": "admin",
-          "password": {
-            "from_secret": "registry_password"
-          },
-          "repo": "registry.bstu.cn/admin/"+NAME,
-          "registry": "registry.bstu.cn"
-        }
-      },
+// 太耗时了，改用ssh
+//      {
+//        "name": "docker build&&push",
+//        "image": "plugins/docker",
+//        "settings": {
+//          "username": "admin",
+//          "password": {
+//            "from_secret": "registry_password"
+//          },
+//          "repo": "registry.bstu.cn/admin/"+NAME,
+//          "registry": "registry.bstu.cn"
+//        }
+//      },
       {
         "name": "rebuild-cache",
         "image": "drillster/drone-volume-cache",
@@ -82,7 +89,9 @@ local RUN="/data/docker/" + NAME;
           "command_timeout": "10m",
           "script_stop": false,
           "script": [
-            "cd "+RUN,
+            "cd "+SOURCE,
+            "docker build -t "+NAME+" .",
+            "cd ..",
             "docker-compose up -d"
           ]
         }
@@ -113,6 +122,12 @@ local RUN="/data/docker/" + NAME;
         "name": "config-conf",
         "host": {
           "path": CONF
+        }
+      },
+      {
+        "name": "source-conf",
+        "host": {
+          "path": SOURCE
         }
       },
       {
