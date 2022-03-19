@@ -44,7 +44,7 @@ local SOURCE="/data/docker/" + NAME+"/source/";
           "yarn build:live",
           "mkdir -p "+SOURCE, # 创建源码目录
           "rm -rf "+SOURCE+"*", # 删除以前的源码
-          "cp -rf node_modules dist script deploy.sh start.sh "+SOURCE
+          "cp -rf Dockerfile node_modules dist script deploy.sh start.sh "+SOURCE
         ]
       },
 // 太耗时了，改用ssh
