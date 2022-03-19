@@ -46,9 +46,13 @@ local RUN="/data/docker/" + NAME;
         "image": "plugins/docker",
         "settings": {
           "username": "admin",
-          "password": "registry_password",
+          "password": {
+            "from_secret": "registry_password"
+          },
           "repo": "registry.bstu.cn/admin/"+NAME,
-          "registry": "registry.bstu.cn"
+          "registry": "registry.bstu.cn",
+          "build_args": [
+          ]
         }
       },
       {
