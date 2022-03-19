@@ -1,12 +1,12 @@
-const rp = require('request-promise');
-const fs = require('fs');
+const rp = require('request-promise')
+const fs = require('fs')
 
 /**
  * 单张图片上传
  */
 const upload = async (ctx, next) => {
-  const file = ctx.request.files.file;
-  console.log(file.path);
+  const file = ctx.request.files.file
+  console.log(file.path)
   let options = {
     url: 'http://0.0.0.0:3005/core/oss/upload',
     method: 'POST',
@@ -25,17 +25,17 @@ const upload = async (ctx, next) => {
             filename: file.name,
             contentType: file.mimeType
           }
-        },
+        }
       ]
     }
-  };
-  let dat = await rp(options);
-  let res = JSON.parse(dat);
-  delete res.data.res;
-  ctx.DATA = res;
-  ctx.body = ctx.DATA;
-};
+  }
+  let dat = await rp(options)
+  let res = JSON.parse(dat)
+  delete res.data.res
+  ctx.DATA = res
+  ctx.body = ctx.DATA
+}
 
 module.exports = {
-  upload,
-};
+  upload
+}

@@ -1,7 +1,7 @@
-const {HttpError} = require('../utils/tool/error');
+const { HttpError } = require('../utils/tool/error')
 
 const fzf = async (ctx, next) => {
-  throw new HttpError(404);
-};
+  throw new HttpError(404)
+}
 
-module.exports = {fzf};
+module.exports = { fzf }

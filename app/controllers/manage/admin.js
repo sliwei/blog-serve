@@ -1,4 +1,4 @@
-const os = require('os');
+const os = require('os')
 
 /**
  * lw 获取服务器信息
@@ -12,12 +12,20 @@ const os = require('os');
  * @param {String} constants 运行状态 0正常 1不正常
  */
 const sys = async (ctx, next) => {
-
-  let {parseInt} = Number;
-  let {freemem, cpus, hostname, platform, release, totalmem, type, constants} = os;
-  let total = parseInt(totalmem() / 1024 / 1024);
-  let num = parseInt(freemem() / 1024 / 1024);
-  let percentage = parseInt((num / total) * 100);
+  let { parseInt } = Number
+  let {
+    freemem,
+    cpus,
+    hostname,
+    platform,
+    release,
+    totalmem,
+    type,
+    constants
+  } = os
+  let total = parseInt(totalmem() / 1024 / 1024)
+  let num = parseInt(freemem() / 1024 / 1024)
+  let percentage = parseInt((num / total) * 100)
 
   ctx.DATA.data = {
     hostname: hostname(),
@@ -28,11 +36,11 @@ const sys = async (ctx, next) => {
     totalmem: `${total}MB`,
     freemem: `${num}MB`,
     constants: constants.SIGTRAP ? '1' : '0',
-    cpu: cpus(),
-  };
-  ctx.body = ctx.DATA;
-};
+    cpu: cpus()
+  }
+  ctx.body = ctx.DATA
+}
 
 module.exports = {
-  sys,
-};
+  sys
+}

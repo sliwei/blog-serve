@@ -1,4 +1,4 @@
-const pty = require('node-pty');
+const pty = require('node-pty')
 
 const create = async (ctx, next) => {
   let cols = parseInt(ctx.query.cols),
@@ -9,28 +9,29 @@ const create = async (ctx, next) => {
       rows: rows || 24,
       cwd: process.env.PWD,
       env: process.env
-    });
+    })
 
-  console.log('Created terminal with PID: ' + term.pid);
-  terminals[term.pid] = term;
-  logs[term.pid] = '';
-  term.on('data', function(data) {
-    logs[term.pid] += data;
-  });
-  ctx.body = term.pid.toString();
-};
+  console.log('Created terminal with PID: ' + term.pid)
+  terminals[term.pid] = term
+  logs[term.pid] = ''
+  term.on('data', function (data) {
+    logs[term.pid] += data
+  })
+  ctx.body = term.pid.toString()
+}
 
-var terminals = {}, logs = {};
+var terminals = {},
+  logs = {}
 const connection = async (ctx, next) => {
-  console.log('AAA');
+  console.log('AAA')
   if (ctx.ws) {
-    const ws = await ctx.ws();
+    const ws = await ctx.ws()
 
-    let term = terminals[parseInt(ctx.params.pid)];
-    console.log('Connected to terminal ' + term.pid);
-    ws.send(logs[term.pid]);
+    let term = terminals[parseInt(ctx.params.pid)]
+    console.log('Connected to terminal ' + term.pid)
+    ws.send(logs[term.pid])
 
-    let i = 1;
+    let i = 1
 
     // ws.send(`\x1b[1;30mwelcome\x1b[0m\r\n`)
     // ws.send(`\x1b[0;30mwelcome\x1b[0m\r\n`)
@@ -71,29 +72,29 @@ const connection = async (ctx, next) => {
     // \x1b[m:结尾
     // https://bixense.com/clicolors/
 
-    term.on('data', function(data) {
+    term.on('data', function (data) {
       try {
-        ws.send(data);
+        ws.send(data)
       } catch (ex) {
         // The WebSocket is not open, ignore
       }
-    });
-    ws.on('message', function(msg) {
-      term.write(msg);
-    });
+    })
+    ws.on('message', function (msg) {
+      term.write(msg)
+    })
     ws.on('close', function () {
-      term.kill();
-      console.log('Closed terminal ' + term.pid);
+      term.kill()
+      console.log('Closed terminal ' + term.pid)
       // Clean things up
-      delete terminals[term.pid];
-      delete logs[term.pid];
-    });
+      delete terminals[term.pid]
+      delete logs[term.pid]
+    })
   }
-};
+}
 
 const cmd = async (ctx, next) => {
   // await ctx.render('cmd');
-  await ctx.render('sk');
+  await ctx.render('sk')
 }
 
-module.exports = {create, connection, cmd};
+module.exports = { create, connection, cmd }

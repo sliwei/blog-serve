@@ -1,9 +1,10 @@
 const http = require('http')
 const socketIo = require('socket.io')
-const pty = require('node-pty');
+const pty = require('node-pty')
 
-var terminals = {}, logs = {};
-const socket = app => {
+var terminals = {},
+  logs = {}
+const socket = (app) => {
   let server
   // if (conf.socket_safe) {
   //   options = {
@@ -17,15 +18,14 @@ const socket = app => {
   // 如果不配置路由，默认是 xxx.com/socket.io/ 路径，客户端连接默认就是这个路径
   server = http.createServer(app.callback())
   // }
-  const io = socketIo(server);
+  const io = socketIo(server)
 
   // 首页路由
   // io.of('/blog/chat').on('connection', (socket) => {
   io.on('connection', (socket) => {
-
-    console.log(socket._query);
-    console.log(socket.request.headers);
-    console.log(socket.handshake);
+    console.log(socket._query)
+    console.log(socket.request.headers)
+    console.log(socket.handshake)
 
     const pid = socket.handshake.query
     const ioId = socket.id
@@ -36,11 +36,20 @@ const socket = app => {
       term = create(ioId)
     }
 
-    socket.emit('chat message', '\x1b[0;36mwelcome \x1b[1;31mXterm\x1b[1;36m!\x1b[0m\r\n')
+    socket.emit(
+      'chat message',
+      '\x1b[0;36mwelcome \x1b[1;31mXterm\x1b[1;36m!\x1b[0m\r\n'
+    )
     socket.emit('chat message', 'ioId: \x1b[1;32m' + ioId + '\x1b[m\r\n')
     // socket.emit('chat message', '实时日志: \x1b[0;36mpm2 logs 1v1-crm-graphql\x1b[m\r\n')
-    socket.emit('chat message', '实时日志: \x1b[0;36mtail -20f /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
-    socket.emit('chat message', '历史日志: \x1b[0;36mtail -n 100 /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n')
+    socket.emit(
+      'chat message',
+      '实时日志: \x1b[0;36mtail -20f /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n'
+    )
+    socket.emit(
+      'chat message',
+      '历史日志: \x1b[0;36mtail -n 100 /root/.pm2/logs/1v1-crm-graphql-[number].log\x1b[m\r\n'
+    )
 
     // 1:30:47
     // 1:字体大小 0 细 1 粗
@@ -50,36 +59,36 @@ const socket = app => {
     // https://bixense.com/clicolors/
 
     socket.on('chat message', (msg) => {
-      term.write(msg);
-    });
+      term.write(msg)
+    })
     term.on('data', function (data) {
       try {
         // if (data.includes('bash-3.2$')) {
-          // socket.emit('chat message', '\x1b[1;36m' + data + '\x1b[m')
+        // socket.emit('chat message', '\x1b[1;36m' + data + '\x1b[m')
         // } else {
-          socket.emit('chat message', data)
+        socket.emit('chat message', data)
         // }
       } catch (ex) {
         // The WebSocket is not open, ignore
       }
-    });
+    })
     socket.on('disconnect', () => {
-      term.kill();
-      console.log('user disconnected. Closed terminal ' + ioId);
+      term.kill()
+      console.log('user disconnected. Closed terminal ' + ioId)
       // Clean things up
-      delete terminals[ioId];
+      delete terminals[ioId]
       // delete logs[ioId];
-    });
-  });
+    })
+  })
   return server
 }
 
 const io = async (ctx, next) => {
-  await ctx.render('cmd');
+  await ctx.render('cmd')
 }
 
 const re = async (ctx, next) => {
-  await ctx.render('re');
+  await ctx.render('re')
 }
 
 const create = (ioId) => {
@@ -91,9 +100,9 @@ const create = (ioId) => {
     rows: 24,
     cwd: process.env.PWD,
     env: process.env
-  });
-  console.log('Created terminal with PID: ' + term.pid);
-  terminals[ioId] = term;
+  })
+  console.log('Created terminal with PID: ' + term.pid)
+  terminals[ioId] = term
   // logs[term.pid] = '';
   // term.on('data', function (data) {
   //   logs[term.pid] += data;
@@ -111,15 +120,15 @@ const ioCreate = async (ctx, next) => {
       rows: rows || 24,
       cwd: process.env.PWD,
       env: process.env
-    });
+    })
 
-  console.log('Created terminal with PID: ' + term.pid);
-  terminals[term.pid] = term;
-  logs[term.pid] = '';
+  console.log('Created terminal with PID: ' + term.pid)
+  terminals[term.pid] = term
+  logs[term.pid] = ''
   term.on('data', function (data) {
-    logs[term.pid] += data;
-  });
-  ctx.body = term.pid.toString();
-};
+    logs[term.pid] += data
+  })
+  ctx.body = term.pid.toString()
+}
 
-module.exports = {socket, io, ioCreate, re};
+module.exports = { socket, io, ioCreate, re }

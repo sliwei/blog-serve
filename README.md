@@ -6,7 +6,7 @@
 
 ## Dev Setup
 
-``` bash
+```bash
 # 安装
 npm install
 
@@ -20,7 +20,7 @@ localhost:xxxx
 
 ## Build Setup
 
-``` bash
+```bash
 
 # 打包
 npm run build
@@ -77,16 +77,16 @@ blog-serve
 
 ## 项目技术栈
 
-字段|描述
-----|----
-axios request request-promise|http请求
-jsonwebtoken|token安全验证
-koa2-cors|跨域
-moment|时间处理
-mysql2|数据库
-nunjucks|html模板
-parameter|数据校验
-sequelize|数据库ORM
-svg-captcha|图片验证码生成工具
-geetest|极验接入
-swagger-injector|接口文档
+| 字段                          | 描述               |
+| ----------------------------- | ------------------ |
+| axios request request-promise | http 请求          |
+| jsonwebtoken                  | token 安全验证     |
+| koa2-cors                     | 跨域               |
+| moment                        | 时间处理           |
+| mysql2                        | 数据库             |
+| nunjucks                      | html 模板          |
+| parameter                     | 数据校验           |
+| sequelize                     | 数据库 ORM         |
+| svg-captcha                   | 图片验证码生成工具 |
+| geetest                       | 极验接入           |
+| swagger-injector              | 接口文档           |

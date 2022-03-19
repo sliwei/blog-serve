@@ -1,11 +1,11 @@
-const util = require('util');
-const ERROR_MSG = require('./errorMsg');
+const util = require('util')
+const ERROR_MSG = require('./errorMsg')
 
 function CustomError(code, msg) {
-  Error.call(this, '');
+  Error.call(this, '')
 
-  this.code = code;
-  this.msg = msg || ERROR_MSG[code] || 'unknown error';
+  this.code = code
+  this.msg = msg || ERROR_MSG[code] || 'unknown error'
 
   this.getCodeMsg = function () {
     return {
@@ -25,9 +25,9 @@ function HttpError(code, msg) {
   CustomError.call(this, code, msg)
 }
 
-util.inherits(HttpError, CustomError);
+util.inherits(HttpError, CustomError)
 
 module.exports = {
   HttpError,
   CustomError
-};
+}

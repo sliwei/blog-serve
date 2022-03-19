@@ -39,7 +39,6 @@ local RUN="/data/docker/" + NAME;
           "cp -rf "+CONF+"/mysql-orm.js "+ROOT+"/app/config/mysql.js",
           "cp -rf "+CONF+"/gt.js "+ROOT+"/app/config/gt.js",
           "yarn build",
-
         ]
       },
       {

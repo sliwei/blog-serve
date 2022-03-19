@@ -4,7 +4,7 @@ const _externals = require('externals-dependencies')
 const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-module.exports = env => {
+module.exports = (env) => {
   return {
     mode: env.production ? 'production' : 'development',
     entry: {
