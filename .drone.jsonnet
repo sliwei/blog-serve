@@ -53,18 +53,18 @@ local RUN="/data/docker/" + NAME;
           "tags": "latest"
         }
       },
-      {
-        "name": "docker build&&push",
-        "image": "plugins/docker",
-        "settings": {
-          "username": "admin",
-          "password": {
-            "from_secret": "registry_password"
-          },
-          "repo": "registry.bstu.cn/admin/"+NAME,
-          "registry": "registry.bstu.cn"
-        }
-      },
+//      {
+//        "name": "docker build&&push",
+//        "image": "plugins/docker",
+//        "settings": {
+//          "username": "admin",
+//          "password": {
+//            "from_secret": "registry_password"
+//          },
+//          "repo": "registry.bstu.cn/admin/"+NAME,
+//          "registry": "registry.bstu.cn"
+//        }
+//      },
       {
         "name": "rebuild-cache",
         "image": "drillster/drone-volume-cache",
