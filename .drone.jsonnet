@@ -43,7 +43,7 @@ local RUN="/data/docker/" + NAME;
       },
       {
         "name": "docker build&&push",
-        "image": "drillster/drone-volume-cache",
+        "image": "plugins/docker",
         "settings": {
           "username": "admin",
           "password": "registry_password",
