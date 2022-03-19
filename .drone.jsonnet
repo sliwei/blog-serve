@@ -50,9 +50,7 @@ local RUN="/data/docker/" + NAME;
             "from_secret": "registry_password"
           },
           "repo": "registry.bstu.cn/admin/"+NAME,
-          "registry": "registry.bstu.cn",
-          "build_args": [
-          ]
+          "registry": "registry.bstu.cn"
         }
       },
       {
