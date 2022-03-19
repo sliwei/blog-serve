@@ -46,7 +46,7 @@ local RUN="/data/docker/" + NAME;
         "name": "docker build&&push",
         "image": "drillster/drone-volume-cache",
         "settings": {
-          "username": admin,
+          "username": "admin",
           "password": "registry_password",
           "repo": "registry.bstu.cn/admin/"+NAME,
           "registry": "registry.bstu.cn"
