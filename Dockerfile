@@ -19,12 +19,13 @@ WORKDIR /app
 
 EXPOSE 3004
 
-RUN apk add --update \
-          python \
-          python-dev \
-          py-pip \
-          make \
-          g++ && cd node_modules/node-pty && yarn run install
+# 如果build环境与运行环境不同需要执行pty的重新编译
+#RUN apk add --update \
+#          python \
+#          python-dev \
+#          py-pip \
+#          make \
+#          g++ && cd node_modules/node-pty && yarn run install
 
 RUN ["chmod", "+x", "/app/start.sh"]
 
