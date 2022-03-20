@@ -77,7 +77,7 @@ local SOURCE="/data/docker/" + NAME+"/source/";
         ]
       },
       {
-        "name": "start || restart",
+        "name": "docker build && up",
         "image": "appleboy/drone-ssh",
         "settings": {
           "host": "bstu.cn",
