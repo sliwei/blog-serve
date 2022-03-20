@@ -26,7 +26,7 @@ local SOURCE="/data/docker/awei/" + NAME+"/source/";
       },
       {
         "name": "build & copy",
-        "image": "node:14",
+        "image": "node:14.17.1-alpine",
         "volumes": [
           {
             "name": "config-conf",
