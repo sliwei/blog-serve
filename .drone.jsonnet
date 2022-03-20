@@ -1,6 +1,6 @@
 local NAME="blog-serve";
 local CONF="/data/config";
-local SOURCE="/data/docker/" + NAME+"/source/";
+local SOURCE="/data/docker/awei/" + NAME+"/source/";
 
 [
   {
