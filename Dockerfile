@@ -1,10 +1,7 @@
 FROM node:14.17.1-alpine
 
-COPY node_modules /app/node_modules
-COPY dist /app/dist
-COPY script /app/script
-COPY deploy.sh /app
-COPY start.sh /app
+COPY dist /www
+COPY node_modules /www/node_modules
 
 #设置变量
 ENV DATABASE=""
@@ -15,19 +12,19 @@ ENV PORT=""
 ENV GT_ID=""
 ENV GT_KEY=""
 
-WORKDIR /app
+WORKDIR /www
 
 EXPOSE 3004
 
 # 如果build环境与运行环境不同需要执行pty的重新编译
-#RUN apk add --update \
-#          python \
-#          python-dev \
-#          py-pip \
-#          make \
-#          g++ && cd node_modules/node-pty && yarn run install
+RUN apk add --update \
+          python \
+          python-dev \
+          py-pip \
+          make \
+          g++ && cd node_modules/node-pty && yarn run install
 
-RUN ["chmod", "+x", "/app/start.sh"]
+RUN ["chmod", "+x", "./start.sh"]
 
 CMD ./start.sh
 

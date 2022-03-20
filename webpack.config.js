@@ -11,7 +11,7 @@ module.exports = (env) => {
       app: './bin/www.js'
     },
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'dist', 'app'),
       filename: 'server.js'
     },
     resolve: {
@@ -52,7 +52,10 @@ module.exports = (env) => {
       }),
       new CopyPlugin([
         { from: 'app/views', to: './views' },
-        { from: 'app/public', to: './public' }
+        { from: 'app/public', to: './public' },
+        { from: 'script', to: '../script' },
+        { from: 'deploy.sh', to: '..' },
+        { from: 'start.sh', to: '..' }
       ])
     ]
   }
