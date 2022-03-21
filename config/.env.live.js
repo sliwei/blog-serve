@@ -3,6 +3,7 @@
 module.exports = {
   env: 'live',
   api_url: {
+    API_CORE: 'http://core-serve:3000'
   },
   db: {
     database: '##DATABASE##',
@@ -20,10 +21,10 @@ module.exports = {
       },
       define: {
         insecureAuth: true,
-        timestamps: false,
+        timestamps: false
       },
       timezone: '+08:00'
-    },
+    }
   },
   gt: {
     geetest_id: '##GT_ID##',

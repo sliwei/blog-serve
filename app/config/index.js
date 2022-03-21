@@ -5,8 +5,8 @@ const env = require(`../../config/.env.${process.env.ENV}.js`)
 
 const config = {
   mode: process.env.MODE, // development || production
-  port: 3004, // 端口
-  tokenObs: 'server', // token混淆码
+  port: 3000, // 端口
+  tokenObs: 'blog-serve', // token混淆码
   verificationObs: 'blog-serve', // 验证码混淆码
   verificationSta: true, // 启用验证码
   cookieOptions: {
