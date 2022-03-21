@@ -8,11 +8,8 @@ const logger = require('koa-logger')
 const cors = require('koa2-cors')
 const colors = require('colors')
 const { resolve } = require('path')
-const swagger = require('swagger-injector')
+const { koaSwagger } = require('koa2-swagger-ui')
 const mysql = require('mysql2')
-// const websocket = require('koa-easy-ws')
-// const https = require('https');
-const fs = require('fs')
 
 const conf = require('./config')
 const index = require('./routes')
@@ -146,8 +143,11 @@ app.use(async (ctx, next) => {
 
 // swagger
 app.use(
-  swagger.koa({
-    path: resolve(__dirname, './public', 'swagger.json')
+  koaSwagger({
+    routePrefix: '/blog/swagger', // host at /swagger instead of default /docs
+    swaggerOptions: {
+      url: '/blog/api/swagger.json' // example path to json 其实就是之后swagger-jsdoc生成的文档地址
+    }
   })
 )
 

@@ -87,10 +87,6 @@ const io = async (ctx, next) => {
   await ctx.render('cmd')
 }
 
-const re = async (ctx, next) => {
-  await ctx.render('re')
-}
-
 const create = (ioId) => {
   // let cols = parseInt(ctx.query.cols)
   // let rows = parseInt(ctx.query.rows)
@@ -131,4 +127,4 @@ const ioCreate = async (ctx, next) => {
   ctx.body = term.pid.toString()
 }
 
-module.exports = { socket, io, ioCreate, re }
+module.exports = { socket, io, ioCreate }

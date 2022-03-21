@@ -1,5 +1,52 @@
 const router = require('koa-router')()
+const swaggerJsdoc = require('swagger-jsdoc')
+const { join } = require('path')
 
+const options = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      description: '服务端',
+      version: '1.0.0',
+      title: '服务端'
+    },
+    host: '',
+    basePath: '/',
+    tags: [
+      {
+        name: 'server',
+        description: 'auth'
+      }
+    ],
+    schemes: ['http', 'https'],
+    // components: {
+    //   schemas: {
+    //     Order: {
+    //       type: 'object'
+    //     }
+    //   },
+    //   securitySchemes: {
+    //     BasicAuth: { type: 'http', scheme: 'basic' }
+    //   }
+    // }
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+    security: [
+      {
+        bearerAuth: []
+      }
+    ]
+  },
+  apis: [join(__dirname, '../controllers/*.js')]
+}
+const openapiSpecification = swaggerJsdoc(options)
 // 数据校验
 const parameter = require('../utils/parameter')
 // token校验
@@ -56,12 +103,13 @@ const { index } = require('../controllers/index')
 const { fzf } = require('../controllers/fzf')
 const { type, data } = require('../controllers/client/expenses')
 const { cmd, create, connection, socket } = require('../controllers/cmd')
-const { io, ioCreate, re } = require('../controllers/io')
+const { io, ioCreate } = require('../controllers/io')
 const {
   build_devops,
   devops_list,
   operation_devops
 } = require('../controllers/manage/devops')
+const { re, recaptcha } = require('../controllers/manage/recaptcha')
 
 // client blog
 router.get('/blog/client/blog/list', list)
@@ -117,7 +165,7 @@ router.post(
 // login
 router.get('/blog/manage/login/info', checkToken, info)
 router.post('/blog/manage/login/login', checkCode, parameter, login)
-router.post('/blog/manage/login/gt_login', checkGtCode, login)
+router.post('/blog/manage/login/gt_login', login)
 router.post('/blog/manage/login/register', checkCode, parameter, register)
 // tag
 router.get('/blog/manage/tag/tag_list', checkToken, tag_list)
@@ -137,7 +185,6 @@ router.get('/blog/ex/data', data)
 // io
 // router.get('/blog/io', io);
 // router.get('/blog/io/create', ioCreate);
-// router.get('/re', re);
 // devops
 router.post('/blog/manage/devops/build_devops', checkToken, build_devops)
 router.post('/blog/manage/devops/devops_list', checkToken, devops_list)
@@ -146,24 +193,13 @@ router.post(
   checkToken,
   operation_devops
 )
-
-const fetch = require('node-fetch')
-router.get('/validate', async (ctx) => {
-  console.log(ctx.query.token)
-  const url = 'https://www.recaptcha.net/recaptcha/api/siteverify'
-  const secret_key = '6LdOO74ZAAAAAFn3LrtVVW6tR8-PpWcq7i1s7RDX'
-  const token = ctx.query.token
-  const response = await fetch(
-    `${url}?secret=${secret_key}&response=${token}`,
-    {
-      method: 'post'
-    }
-  )
-  const dat = await response.json()
-  console.log(dat)
-  ctx.DATA.data = dat
-  ctx.DATA.message = 'This is the GET test.'
-  ctx.body = ctx.DATA
+// recaptcha
+router.get('/blog/recaptcha', re)
+router.get('/blog/validate', recaptcha)
+// swagger
+router.get('/blog/api/swagger.json', async function (ctx) {
+  ctx.set('Content-Type', 'application/json')
+  ctx.body = openapiSpecification
 })
 // index
 router.get('/', index)

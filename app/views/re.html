@@ -16,9 +16,10 @@
             .execute(CAPTCHA_CLIENT_SECRET, { action: 'homepage' })
             .then(function (token) {
               console.log('客户端token:' + token)
-              fetch('http://localhost:3004/validate?token=' + token, {
+              fetch('/blog/validate?token=' + token, {
                 method: 'GET'
               }).then((response) => {
+                console.log(response);
                 if (response.ok) {
                   response.json().then((message) => {
                     console.log('服务端验证')
