@@ -4,8 +4,6 @@ services:
   blog-serve:
     container_name: blog-serve
     image: blog-serve
-    ports:
-      - 8889:3004
     environment:
       - DATABASE=db
       - USERNAME=user
@@ -14,3 +12,9 @@ services:
       - PORT=3306
       - GT_ID=xx
       - GT_KEY=xx
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

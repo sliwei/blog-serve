@@ -1,5 +1,4 @@
 local NAME="blog-serve";
-local CONF="/data/config";
 local SOURCE="/data/docker/awei/" + NAME+"/source/";
 
 [
@@ -29,18 +28,12 @@ local SOURCE="/data/docker/awei/" + NAME+"/source/";
         "image": "node:14.17.1-alpine",
         "volumes": [
           {
-            "name": "config-conf",
-            "path": CONF
-          },
-          {
             "name": "source-conf",
             "path": SOURCE
           }
         ],
         "commands": [
           "yarn",
-          "cp -rf "+CONF+"/mysql-orm.js app/config/mysql.js",
-          "cp -rf "+CONF+"/gt.js app/config/gt.js",
           "yarn build:live",
           "mkdir -p "+SOURCE, # 创建源码目录
           "rm -rf "+SOURCE+"*", # 删除以前的源码
@@ -118,12 +111,6 @@ local SOURCE="/data/docker/awei/" + NAME+"/source/";
       }
     ],
     "volumes": [
-      {
-        "name": "config-conf",
-        "host": {
-          "path": CONF
-        }
-      },
       {
         "name": "source-conf",
         "host": {
