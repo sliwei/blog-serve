@@ -11,6 +11,7 @@
     "build:prod": "webpack --env.ENV=prod --env.production",
     "build:live": "webpack --env.ENV=live --env.production",
     "node": "node dist/server.js",
+    "prettier": "npx prettier --write .",
     "lint": "eslint --quiet=true --fix --ext .js app",
     "lint:fix": "eslint --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,6 +22,7 @@
     }
   },
   "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown",
     "app/**/*.js": [
       "eslint --fix",
       "git add"
