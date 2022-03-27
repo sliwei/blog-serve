@@ -1,27 +1,20 @@
-const request = require('request')
+const fetch = require('node-fetch')
 const re = async (ctx, next) => {
   await ctx.render('re')
 }
 /**
  * 谷歌校验
  */
-const recaptcha = async (ctx, next) => {
-  console.log(ctx.query.token)
-  const url = 'https://www.recaptcha.net/recaptcha/api/siteverify'
-  const secret_key = '6LdOO74ZAAAAAFn3LrtVVW6tR8-PpWcq7i1s7RDX'
+const validate = async (ctx, next) => {
   const token = ctx.query.token
-  const response = await request(
-    `${url}?secret=${secret_key}&response=${token}`,
-    {
-      method: 'post'
-    }
-  )
-  ctx.DATA.data = response
-  ctx.DATA.message = 'This is the GET test.'
+  const secretKey = '6LfTlxkfAAAAAPa-1zRYDzDkOImff4hBYWuAg-Bu'
+  const verifyURL = `https://www.recaptcha.net/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`
+  const body = await fetch(verifyURL).then((res) => res.json())
+  ctx.DATA.data = body
   ctx.body = ctx.DATA
 }
 
 module.exports = {
   re,
-  recaptcha
+  validate
 }

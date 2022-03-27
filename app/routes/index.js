@@ -44,7 +44,7 @@ const options = {
       }
     ]
   },
-  apis: [join(__dirname, '../controllers/*.js')]
+  apis: [join(__dirname, '../controllers/**/*.js')]
 }
 const openapiSpecification = swaggerJsdoc(options)
 // 数据校验
@@ -109,7 +109,7 @@ const {
   devops_list,
   operation_devops
 } = require('../controllers/manage/devops')
-const { re, recaptcha } = require('../controllers/manage/recaptcha')
+const { re, validate } = require('../controllers/manage/recaptcha')
 
 // client blog
 router.get('/blog/client/blog/list', list)
@@ -195,7 +195,7 @@ router.post(
 )
 // recaptcha
 router.get('/blog/recaptcha', re)
-router.get('/blog/validate', recaptcha)
+router.get('/blog/validate', validate)
 // swagger
 router.get('/blog/api/swagger.json', async function (ctx) {
   ctx.set('Content-Type', 'application/json')
