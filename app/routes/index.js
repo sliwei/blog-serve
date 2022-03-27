@@ -165,7 +165,7 @@ router.post(
 // login
 router.get('/blog/manage/login/info', checkToken, info)
 router.post('/blog/manage/login/login', checkCode, parameter, login)
-router.post('/blog/manage/login/gt_login', login)
+router.post('/blog/manage/login/gt_login', checkGtCode, login)
 router.post('/blog/manage/login/register', checkCode, parameter, register)
 // tag
 router.get('/blog/manage/tag/tag_list', checkToken, tag_list)
